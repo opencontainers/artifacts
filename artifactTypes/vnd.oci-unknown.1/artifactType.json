@@ -1,0 +1,30 @@
+{
+  "mediaType": "application/vnd.oci.image.config.v1+json",
+  "spec": "https://github.com/opencontainers/artifacts",
+  "title": {
+    "locale": "en-US",
+    "title": "An unknown type"
+  },
+  "description": {
+    "locale": "en-US",
+    "description": "An undefined type - USE ONLY FOR DEVELOPMENT"
+  },
+  "url": "https://github.com/opencontainers/artifacts",
+  "tools":[
+    {
+      "title": {
+        "locale": "en-US",
+        "title": "ORAS"
+      },
+      "url": "https://github.com/deislabs/oras"
+    }
+  ],
+  "configSchemaReference": "https://raw.githubusercontent.com/SteveLasker/scratch/master/artifactTypeSchema.json",
+  "layerMediaTypes": [
+    "application/vnd.oci.unknown.layer.v1.bin",
+    "application/vnd.oci.unknown.layer.v1.json",
+    "application/vnd.oci.unknown.layer.v1.tar",
+    "application/vnd.oci.unknown.layer.v1.txt",
+    "application/vnd.oci.unknown.layer.v1.yaml"
+  ]
+}
