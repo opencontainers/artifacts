@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "config": {
+    "mediaType": "application/vnd.oci.unknown.config.v1+json",
+    "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.unknown.layer.v1+txt",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "annotations": {
+        "org.opencontainers.image.title": "empty.txt"
+      }
+    }
+  ]
+}

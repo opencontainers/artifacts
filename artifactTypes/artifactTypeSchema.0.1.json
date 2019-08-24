@@ -1,0 +1,173 @@
+{
+  "definitions": {},
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "mediaType",
+    "title",
+    "description",
+    "layerMediaTypes"
+  ],
+  "properties": {
+    "mediaType": {
+      "$id": "#/properties/mediaType",
+      "type": "string",
+      "description": "Collection of localized titles, which may be displayed in registry and tool artifact listing.",
+      "default": "application/vnd.oci.unknown.config.v1+json",
+      "examples": [
+        "application/vnd.oci.unknown.config.v1+json"
+      ],
+      "minLength": 35,
+      "maxLength": 100
+    },
+    "title": {
+      "$id": "#/properties/title",
+      "type": "object",
+      "description": "Collection of localized titles, which may be displayed in registry and tool artifact listing.",
+      "required": [
+        "locale",
+        "title"
+      ],
+      "properties": {
+        "locale": {
+          "$id": "#/properties/title/items/properties/locale",
+          "type": "string",
+          "description": "language-locale ISO code",
+          "default": "en-US",
+          "examples": [
+            "en-US"
+          ],
+          "minLength": 5,
+          "maxLength": 5
+        },
+        "title": {
+          "$id": "#/properties/title/items/properties/title",
+          "type": "string",
+          "description": "Localized title of the artifact type.",
+          "default": "",
+          "examples": [
+            "Unknown type"
+          ],
+          "minLength": 3,
+          "maxLength": 30
+        }
+      }
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "object",
+      "description": "Provides a short description of the type for human consumption.",
+      "required": [
+        "locale",
+        "description"
+      ],
+      "properties": {
+        "locale": {
+          "$id": "#/properties/title/properties/locale",
+          "type": "string",
+          "description": "language-locale ISO code",
+          "default": "en-US",
+          "examples": [
+            "en-US"
+          ],
+          "minLength": 5,
+          "maxLength": 5
+        },
+        "description": {
+          "$id": "#/properties/description/properties/description",
+          "type": "string",
+          "description": "Localized description of the artifact type.",
+          "examples": [
+            "Unknown type"
+          ],
+          "minLength": 5,
+          "maxLength": 255
+        }
+      }
+    },
+    "specUrl": {
+      "$id": "#/properties/specUrl",
+      "type": "string",
+      "description": "References a spec, providing additional details on the type.",
+      "format": "url"
+    },
+    "moreInfoUrl": {
+      "$id": "#/properties/moreInfoUrl",
+      "type": "string",
+      "description": "Provides additional details, intended for consumers of the type.",
+      "format": "url"
+    },
+    "tools": {
+      "$id": "#/properties/tools",
+      "type": "array",
+      "description": "Provides a collection of tools that may be used with artifact type.",
+      "items": {
+        "$id": "#/properties/tools/items",
+        "type": "object",
+        "required": [
+          "url",
+          "title"
+        ],
+        "properties": {
+          "url": {
+            "$id": "#/properties/tools/items/properties/url",
+            "type": "string",
+            "description": "Links to a page where users can download the tool."
+          },
+          "title": {
+            "$id": "#/properties/tools/items/properties/title",
+            "type": "object",
+            "description": "Represents the name of the tool, displayed for human consumption.",
+            "required": [
+              "locale",
+              "title"
+            ],
+            "properties": {
+              "locale": {
+                "$id": "#/properties/tools/items/properties/title/items/properties/locale",
+                "type": "string",
+                "description": "language-locale ISO code",
+                "default": "en-US",
+                "examples": [
+                  "en-US"
+                ],
+                "minLength": 5,
+                "maxLength": 5
+              },
+              "title": {
+                "$id": "#/properties/tools/items/properties/title/items/properties/title",
+                "type": "string",
+                "description": "Localized name of the tool, displayed for human consumption.",
+                "minLength": 3,
+                "maxLength": 30
+              }
+            }
+          }
+        }
+      }
+    },
+    "configSchemaReference": {
+      "$id": "#/properties/configSchemaReference",
+      "type": "string",
+      "description": "provides a schema reference for the artifact config object.",
+      "format": "url"
+    },
+    "layerMediaTypes": {
+      "$id": "#/properties/layerMediaTypes",
+      "type": "array",
+      "description": "Represents one or more layer mediaTypes, defined by the artifact.",
+      "items": {
+        "$id": "#/properties/layerMediaTypes/items",
+        "type": "string",
+        "default": "application/vnd.oci.unknown.layer.v1.tar",
+        "examples": [
+          "application/vnd.oci.unknown.layer.v1.bin",
+          "application/vnd.oci.unknown.layer.v1.json",
+          "application/vnd.oci.unknown.layer.v1.tar",
+          "application/vnd.oci.unknown.layer.v1.txt",
+          "application/vnd.oci.unknown.layer.v1.yaml"
+        ]
+      }
+    }
+  }
+}
