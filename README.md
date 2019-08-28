@@ -18,6 +18,7 @@ By providing an OCI artifact definition, the community can continue to innovate,
 * [OCI Artifact Implementations](implementors.md)
 
 ## OCI Governance
+
 * [The Apache License, Version 2.0](LICENSE)
 * [Maintainers](MAINTAINERS)
 * [Maintainer guidelines](MAINTAINERS_GUIDE.md)
