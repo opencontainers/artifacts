@@ -10,14 +10,14 @@ This repository provides a reference for artifact authors and registry implement
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution ([YASS][def-yass]).
 
-## OCI Artifact Table of Contents
+## Table of Contents
 
 * [Overview of Registry Content Delivery](#overview-of-registry-content-delivery)
 * [Defining OCI Artifact Types](#defining-oci-artifact-types)
 * [Definitions & Terms](definitions-terms.md)
-* [OCI Artifact Implementations](implementors.md)
 
 ## OCI Governance
+
 * [The Apache License, Version 2.0](LICENSE)
 * [Maintainers](MAINTAINERS)
 * [Maintainer guidelines](MAINTAINERS_GUIDE.md)
