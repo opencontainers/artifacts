@@ -1,0 +1,26 @@
+{
+  "mediaType": "application/vnd.oci.image.config.v1+json",
+  "spec": "https://github.com/opencontainers/image-spec/blob/master/layer.md#gzip-media-types",
+  "title": {
+    "locale": "en-US",
+    "title": "OCI Image"
+  },
+  "description": {
+    "locale": "en-US",
+    "description": "OCI Image"
+  },
+  "url": "https://www.opencontainers.org/",
+  "tools":[
+    {
+      "title": {
+        "locale": "en-US",
+        "title": "OCI Runtime"
+      },
+      "url": "https://github.com/opencontainers/runtime-tools"
+    }
+  ],
+  "configSchemaReference": "https://raw.githubusercontent.com/opencontainers/image-spec/master/schema/config-schema.json",
+  "layerMediaTypes": [
+    "application/vnd.oci.image.layer.v1.tar"
+  ]
+}
