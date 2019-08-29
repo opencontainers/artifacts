@@ -22,6 +22,6 @@ group_defaults:
       - master
 
 groups:
-  image-spec:
+  artifacts:
     teams:
       - artifacts-maintainers
