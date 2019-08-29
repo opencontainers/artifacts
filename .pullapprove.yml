@@ -13,7 +13,9 @@ group_defaults:
   reset_on_push:
     enabled: true
   author_approval:
-    ignored: true
+    ignored: false
+  github_reviews:
+      enabled: true
   always_pending:
     title_regex: ^WIP
     explanation: 'Work in progress...'
