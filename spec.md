@@ -36,8 +36,6 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 
 ## Scope
 
-The goal of this specification is to standardize artifact distribution, leveraging the infrastructure used to run [OCI Distribution Spec][distribution-spec] compliant registries.
-
 [Artifacts v1.0][artifacts] is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifacts including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
 
 ### Future Scope
