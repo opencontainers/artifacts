@@ -23,7 +23,7 @@ The encryption metadata consists of 2 parts: the PublicLayerBlockCipherOptions a
 
 Below are golang definitions of these JSON objects:
 
-```
+```golang
 // LayerCipherType is the ciphertype as specified in the layer metadata
 type LayerCipherType string
 // PublicLayerBlockCipherOptions includes the information required to encrypt/decrypt
@@ -61,12 +61,13 @@ Details of the algorithms and protocols used in the encryption of the data blob 
 - The `cipherOptions` field specifies additional parameters used in the decryption process of the specified algorithm. This should be in accordance with the RFC standard of the algorithm used.
 
 Example of `PublicLayerBlockCipherOption`:
-```
+```json
 {
     "cipher": "AES_256_CTR_HMAC_SHA256",
-    "hmac": "M0M5OTA5QUZFQzI1MzU0RDU1MURBRTIxNTkwQkIyNkUzOEQ1M0YyMTczQjhEM0RDM0VFRTRDMDQ3RTdBQjFDMQ=="
+    "hmac": "M0M5OTA5QUZFQzI1MzU0RDU1MURBRTIxNTkwQkIyNkUzOEQ1M0YyMTczQjhEM0RDM0VFRTRDMDQ3RTdBQjFDMQ==",
     "cipheroptions": {}
 }
+```
 
 Example of `PrivateLayerBlockCipherOption`:
 ```
