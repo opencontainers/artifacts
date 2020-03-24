@@ -26,13 +26,13 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 ## Table of Contents
 
 - [Scope](#scope)
-  - [Future](#future-scope)
 - [Defining OCI Artifact Types](#defining-oci-artifact-types)
-- [Defining a Unique Artifact Type](#defining-a-unique-artifact-type)
+- [Authoring an OCI Artifacts](#authoring-an-oci-artifacts)
 - [Defining Supported Layer Types](#defining-supported-layer-types)
 - [Optional: Defining Config Schema](#optional-defining-config-schema)
-- [Optional: Artifact Publisher Manifest](#optional-defining-artifact-publisher-manifests)
-  - [Artifact Publisher Manifest Example](#artifact-publisher-manifest-type-example) as a [Well Known Type][def-well-known-types]
+- [Optional: Defining Artifact Publisher Manifests](#optional-defining-artifact-publisher-manifests)
+- [Registering Unique Types](#registering-unique-types)
+- [References](#references)
 
 ## Scope
 
@@ -44,13 +44,18 @@ Future versions will support new artifact types that represent collections of ar
 
 ## Defining OCI Artifact Types
 
-As registries become content addressable distribution points, tools that pull artifacts must know if they can operate on the artifact. Artifact types are equivalent to file extensions. 
+As registries become content addressable distribution points, tools that pull artifacts must know if they can operate on the artifact. Artifact types are equivalent to file extensions.
+
 - When users open files, the host operating system typically launches the appropriate program.
 - When users open a file, from within a program, the open dialog filters to the supported types.
 - When search or security software scan the contents of a storage solution, the software must to know how to process the different types of content.
 - When users view the contents of a storage solution, they see the textual and visual indications of the type.
 
 OCI Artifacts provides these core capabilities to [OCI distribution spec][distribution-spec] based registries.
+
+### Visualizing Artifacts
+
+The manifest `config.mediaType` is the equivalent to a file extension, enabling artifact type differentiation.
 
 Once complete, Artifacts can be identified and visualized as the following:
 
@@ -67,7 +72,7 @@ Authoring Artifacts involves the following steps:
 1. [Define a unique Artifact type](#defining-a-unique-artifact-type)
 1. Define the format for other tools to operate upon the type.
 1. Define human elements, such as an icon and localized string to be displayed to users.
-1. Optional: Register the unique `mediaType` with [IANA][iana-register-media-types].
+1. Optional: Register the unique `mediaType` with [IANA][iana-registry-media-types].
 1. Optional: Publish as a [well-known type][def-well-known-types] for registries to consume.
 
 ### Defining a Unique Artifact Type
@@ -80,20 +85,30 @@ For computer processing, artifacts are defined by setting the `manifest.config.m
 
 > **Note:** The `config.mediaType` of `application/vnd.oci.image.config.v1+json` is reserved for artifacts intended to be run and instanced by [docker][docker], [containerd][containerd] and other [OCI Image][image-spec] runtimes and tool chains.
 
-Each new artifact type MUST be uniquely defined. See [registering unique types with IANA](#registering-unique-types) for registering unique mediaTypes.
+Each new artifact type MUST be uniquely defined. See [registering unique types with IANA](#registering-unique-types) for registering unique [well-known][def-well-known-types] mediaTypes.
+
+Each `mediaType` SHOULD use all lower case characters. Multi-part names MAY concatenate words, or use `-` to separate words. eg: (`subtype`, `sub-type`)
 
 The following `mediaType` format is used to differentiate the type of artifact:
 
-`[registration-tree]`.`[org|company|entity]`.`[objectType]`.`[optionalSubType]`.config.`[version]`+`[optionalConfigFormat]`
+`[registration-tree]`.`[org|company|entity]`.`[objectType]`.`[optional-subType]`.config.`[version]`+`[optionalConfigFormat]`
 
-- **`registration-tree`** - represents an IANA root tree. See [iana registration trees][iana-trees] for public and private tree options. 
+- **`registration-tree`** - represents an IANA root tree. See [iana registration trees][iana-trees] for public and private tree options.
 - **`org|company|entity`** - represents an open source foundation (`oci`, `cncf`) or a company (`microsoft`, `ibm`) or some unique entity.
 - **`objectType`** - a value representing the short name of the type.
 - **`optionalSubType`** - provides additional extensibility of an `objectType`
 - **`version`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process.
-- **`optionalConfigFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided. `.json`, `.yaml|yml` or other textual formats are preferred enabling optional, but optimized processing by registry operators upon ingress.
+- **`optionalConfigFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided. `.json`, `.yaml|yml` or other standard textual formats are preferred. By utilizing standard text formats, registry operators MAY parse the contents to provide additional context to users. If the config object is null, the extension MUST be empty.
 
-See [visualizing artifacts](#visualizing-artifacts) for `mediaType` examples.
+### Example `config.mediaTypes`
+
+|Artifact Type|mediaType|
+|-|-|
+| null config | `application/vnd.oci.null-sample.config.v1`|
+| Config in `.json` | `application/vnd.oci.json-sample.config.v2+json`|
+| Config in `.yaml` | `application/vnd.oci.yaml-sample.config.v3+yaml`|
+
+See [visualizing artifacts](#visualizing-artifacts) for additional `mediaType` examples.
 
 ## Defining Supported Layer Types
 
@@ -103,7 +118,7 @@ Defining artifact layers involves:
 
 1. [Defining layer content, understanding layer de-duping](#layer-content-format)
 1. [Optional versioning of layer content](#layer-versioning)
-1. [Defining unique `layer.mediaTypes`](#defining-layer.mediaTypes)
+1. [Defining unique `layer.mediaTypes`](#defining-layermediatypes)
 
 As an example, [OCI Images][image-layer] are represented through an ordinal collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer.
 
@@ -128,7 +143,7 @@ Artifacts authors may define different layers for a range of reasons:
 
 #### De-duping Layers
 
-When designing layer formats, consider how a registry may de-dupe layers that share the same content across different artifacts. Layers may be shared across different instances of an artifact as they're persisted to a registry. The registry may handle de-duping based on the digest of each layer. Artifact layers types are not expected, nor required to be shared across different artifact types. A layer type that represents an OCI Image is not expected to be shared with a Helm Chart. However, two helm charts that have the same content may be de-duped within the registry. The `layer.mediaType` provides the definition of the contents. 
+When designing layer formats, consider how a registry may de-dupe layers that share the same content across different artifacts. Layers may be shared across different instances of an artifact as they're persisted to a registry. The registry may handle de-duping based on the digest of each layer. Artifact layers types are not expected, nor required to be shared across different artifact types. A layer type that represents an OCI Image is not expected to be shared with a Helm Chart. However, two helm charts that have the same content may be de-duped within the registry. The `layer.mediaType` provides the definition of the contents.
 
 ### Layer Versioning
 
@@ -150,14 +165,13 @@ Layer formats that may change should define a version to future proof new enhanc
 **Existing generic formats** follow a similar convention to manifests, utilizing the `layer.mediaType` with the following format:  
 `[registration-tree]`.`[org|company|entity]`.`[layerType]`.`[optionalLayerSubType]`.layer.`[optionalVersion]`.`[fileFormat]`+`[optionalCompressionFormat]`
 
-- **`registration-tree`** - represents an IANA root tree. See [iana registration trees][iana-trees] for public and private tree options. 
+- **`registration-tree`** - represents an IANA root tree. See [iana registration trees][iana-trees] for public and private tree options.
 - **`org|company|entity`** - represents an open source foundation (`oci`, `cncf`), a company or some unique entity.
 - **`layerType`** - a value representing the short name of the type.
 - **`optionalLayerSubType`** - provides additional extensibility of an `layerType`
 - **`optionalVersion`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process. The content format (json, yaml) may not revision, but the content within the layer may evolve. Using a version enables artifact tools to identify the format for processing.
 - **`fileFormat`** - provides a standard, or custom formats, enabling artifact authors to leverage existing or custom content processing libraries.
 - **`optionalCompressionFormat`** - in addition to the fileFormat, what optional compression format is used. (eg: `+gzip`, `+zstd`)
-
 
 ### Example Layer Types
 
@@ -196,9 +210,7 @@ Artifact authors may wish to publish their types as [well known types][def-well-
 An `artifactType.json` file is defined using the [following schema](artifactTypes/artifactTypeSchema.0.1.json).
 
 - **`mediaType`** *string*  
-  This REQUIRED property uniquely identifies the artifact for computer consumption. It may be owned by an org or a company and MUST be globally unique and versioned.  
-  The format of `mediaType` MUST use the following format:  
-  `application/vnd.`[org|company]`.`[objectType]`.`[optionalSubType]`.config.`[version]`+json`
+  This REQUIRED property uniquely identifies the artifact for computer consumption. It may be owned by an org or a company and MUST be [registered as globally unique](#registering-unique-types) and versioned.
 - **`title`** *string-string map*  
   This REQUIRED property must have at least one value, representing the name of the type displayed for human consumption. The title may be displayed in a repository listing, or registry tooling.  
   Title is a collection of localized strings, indexed with [ISO Language Codes][iso-lang-codes].
@@ -232,12 +244,10 @@ Localized title. The max length MUST not exceed 30 characters and MUST not encod
 This OPTIONAL property provides a schema reference for the artifact config object. The schema is provided for registry operators and tools to optionally validate and process information within the config. A registry operator MAY wish to present information, such as the OCI image architecture type. Each versioned artifact type would have a unique version, possibly referencing a unique schema version. To version the schema, the artifactType MUST also be versioned.
 - **`layerMediaTypes`** string-string map  
   This REQUIRED property must have at least one value, representing one or more layer `mediaTypes` used by the artifact.  
-  Layer mediaTypes SHOULD be unique to the specific artifact.  
+  Layer mediaTypes MAY be unique to the specific artifact, or they may [use generic mediaTypes](#defining-layermediatypes).
   Layer mediaTypes are NOT REQUIRED to be unique across different artifact types when artifacts intend to share layers across different artifact tooling.  
   Registry operators MAY choose to validate layers associated with a specific artifact type. Providing the supported layers enables registry operators to know the supported `mediaTypes`.
 
-  `layerMediaTypes` use the following format:  
-  `application/vnd.`[org|company]`.`[objectType]`.`[optionalSubType]`.layer.`[version]`+`[fileFormat].
   - **`mediaType`** *string*  
     This REQUIRED property represents a valid layer `mediaTypes` for the artifact.
 
@@ -247,7 +257,7 @@ The following is an example of an unknown artifact type.
 
 ```json
 {
-  "mediaType": "application/vnd.unknown.config.v1+json",
+  "mediaType": "application/vnd.unknown.config.v1",
   "spec": "https://github.com/opencontainers/artifacts",
   "title": {
     "locale": "en-US",
@@ -269,14 +279,15 @@ The following is an example of an unknown artifact type.
   ],
   "configSchemaReference": "",
   "layerMediaTypes": [
+    "application/tar",
+    "application/txt",
+    "application/text/yaml"
     "application/vnd.oci.unknown.layer.v1.bin",
     "application/vnd.oci.unknown.layer.v1.json",
-    "application/vnd.oci.unknown.layer.v1.tar",
-    "application/vnd.oci.unknown.layer.v1.txt",
-    "application/vnd.oci.unknown.layer.v1.yaml"
   ]
 }
 ```
+
 ## Registering Unique Types
 
 TODO:
