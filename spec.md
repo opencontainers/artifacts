@@ -122,7 +122,7 @@ Defining artifact layers involves:
 
 As an example, [OCI Images][image-layer] are represented through an ordinal collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer.
 
-Some artifacts may be represented as a single file, such as config artifact representing a deployment specification. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients.
+Some artifacts may be represented as a single file, such as config artifact representing a deployment specification. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients. How an artifact client processes layers, merging them with overlay, or extracting them to different locations or hosts is up to the artifact authors.
 
 ### Layer Content Format
 
