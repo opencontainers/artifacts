@@ -8,21 +8,6 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 1. **Registry Operators and Vendors** - guidance for how operators and vendors can support new artifact types, including how they can opt-in or out of well known artifact types. Registry operators that already implement `mediaType` filtering will not have to change. The artifact repo will provide context on how new `mediaTypes` can be used, and how `mediaTypes` can be associated with a type of artifact.
 1. **Clearing House for [Well-known Artifacts][def-well-known-types]** - artifact authors can submit their artifact definitions, providing registry operators a list by which they can easily support.
 
-[Artifacts v1.0][artifacts] presumes a refactoring of the [OCI Image-spec 1.0][image-spec] and the pending [OCI Distribution-spec 1.0][distribution-spec] to refactor [manifest][image-manifest] and [index][image-index] to separately versioned specs. The refactoring is for clarity of use, and is not required to support artifacts.
-
-**Reference**:
-
-- [Need a Working Group for Updating the distribution-spec #9](https://github.com/opencontainers/artifacts/issues/9)
-- [Need a Working Group for Updating the image-spec #10](https://github.com/opencontainers/artifacts/issues/10)
-
-**v1.0 of the image-spec** defines index and manifest.
-
-![image-spec](./media/image-spec-objects.png)
-
-**Artifacts 1.0** visualizes a refactoring of index and manifest.
-
-![refactored artifacts spec](./media/artifacts-spec-objects.png)
-
 ## Table of Contents
 
 - [Scope](#scope)
@@ -30,32 +15,41 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 - [Defining a Unique Artifact Type](#defining-a-unique-artifact-type)
 - [Defining Supported Layer Types](#defining-supported-layer-types)
 - [Optional: Defining Config Schema](#optional-defining-config-schema)
+- [Registering Unique Types with IANA](#registering-unique-types-with-iana)
 - [References](#references)
 
 ## Scope
 
-[Artifacts v1.0][artifacts] is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifacts including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
+Create a first version of the Artifacts specification that is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifacts including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
+
+**v1.0 of the image-spec** defines index and manifest.
+
+<img src="./media/image-spec-objects.png" width=500x>
+
+**Artifacts 1.0** utilize manifest and index to represent multiple artifact types, including the [OCI Image-spec][image-spec]
+
+<img src="./media/artifacts-spec-objects.png" width=500x>
 
 ### Future Scope
 
-Future versions will support new artifact types that represent collections of artifacts using [OCI Index][image-index]. A means to identify an index as a type of artifact will be required.
+Future versions of this specification will support new artifact types representing collections of artifacts using [OCI Index][image-index]. A means to identify an index as a type of artifact will be required.
 
 ## Defining OCI Artifact Types
 
 As registries become content addressable distribution points, tools that pull artifacts must know if they can operate on the artifact. Artifact types are equivalent to file extensions.
 
+As a set of comparison use cases:
+
 - When users open files, the host operating system typically launches the appropriate program.
 - When users open a file, from within a program, the open dialog filters to the supported types.
-- When search or security software scan the contents of a storage solution, the software must to know how to process the different types of content.
-- When users view the contents of a storage solution, they see the textual and visual indications of the type.
+- When search or security software scan the contents of a storage solution, the software must know how to process the different types of content.
+- When users view the storage contents, information about the content is rendered based on the derived type(s) of the content being shown.
 
-OCI Artifacts provides these core capabilities to [OCI distribution spec][distribution-spec] based registries.
+This OCI Artifacts specification enables these use cases for [OCI distribution spec][distribution-spec] based registries by specifying a `manifest.config.mediaType` on the content pushed to a registry.
 
 ### Visualizing Artifacts
 
-The manifest `config.mediaType` is the equivalent of a file extension, enabling artifact type differentiation.
-
-Once complete, artifacts can be identified and visualized as the following:
+The manifest `config.mediaType` is the equivalent of a file extension, enabling artifact type differentiation. Once complete artifacts can be identified and visualized as the following `config.mediaTypes`:
 
 |Icon|Artifact|`config.mediaType`|
 |-|-|-|
@@ -73,7 +67,7 @@ For computer processing, artifacts are defined by setting the `manifest.config.m
 
 > **Note:** The `config.mediaType` of `application/vnd.oci.image.config.v1+json` is reserved for artifacts intended to be run and instanced by [docker][docker], [containerd][containerd] and other [OCI Image][image-spec] runtimes and tool chains.
 
-Each new artifact type MUST be uniquely defined. See [registering unique types with IANA](#registering-unique-types) for registering unique [well-known][def-well-known-types] mediaTypes.
+Each new artifact type MUST be uniquely defined. See [registering unique types with IANA](#registering-unique-types-with-iana) for registering unique [well-known][def-well-known-types] mediaTypes.
 
 Each `mediaType` SHOULD use all lower case characters. Multi-part names MAY concatenate words, or use `-` to separate words. eg: (`subtype`, `sub-type`)
 
@@ -86,7 +80,7 @@ The following `config.mediaType` format is used to differentiate the type of art
 - **`objectType`** - a value representing the short name of the type.
 - **`optionalSubType`** - provides additional extensibility of an `objectType`
 - **`version`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process.
-- **`optional-configFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided. `.json`, `.yaml|yml` or other standard textual formats are preferred. By utilizing standard text formats, registry operators MAY parse the contents to provide additional context to users. If the config object is null, the `optional-configFormat` MUST be empty.
+- **`optional-configFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided, `.json`, `.yaml|yml` or other standard textual formats are preferred. By utilizing standard text formats, registry operators MAY parse the contents to provide additional context to users. If the config object is null, the `optional-configFormat` MUST be empty.
 
 ### Example `config.mediaTypes`
 
@@ -100,7 +94,7 @@ See [visualizing artifacts](#visualizing-artifacts) for additional `mediaType` e
 
 ## Defining Supported Layer Types
 
-The content of an artifact is represented through a collection of layers and an optional config object. The layers of an Artifact may be independent files, collections of files, or ordinal layered tarballs persisted as blobs within a registries storage provider.
+The content of an artifact are represented through a collection of layers and an optional config object. The layers of an artifact may be independent files, collections of files, or ordered layered tarballs persisted as blobs within a registries storage provider.
 
 Defining artifact layers involves:
 
@@ -108,26 +102,26 @@ Defining artifact layers involves:
 1. [Optional versioning of layer content](#layer-versioning)
 1. [Defining `layer.mediaTypes`](#defining-layermediatypes)
 
-As an example, [OCI Images][image-layer] are represented through an ordinal collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer. Not all artifacts are as large or complex.
+As an example, [OCI Images][image-layer] are represented through an ordered collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer.
 
 Some artifacts may be represented as a single file, such as config artifact representing a deployment details. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients. How an artifact client processes layers, merging them with overlay, or extracting them to different locations or hosts is up to the artifact authors.
 
 ### Layer Content Format
 
-The content layer format is up to the artifact author and may utilize standard or custom formats. Authors are encouraged to utilize existing formats which may benefit from existing libraries to parse those formats. Authors may choose to persist individual files with standard or custom formats, such as `.json`, `.yaml`, `.bin`, `.sif`, or store a collection of files as a `.tar` archive. Optionally, the author MAY choose to compress the contents. If compression is used, it MUST be inlcuded in the artifact spec so all clients that interact with the artifact type understand what they must process. The extension of the `layer.mediaType` MUST reflect the format of the blob and its optional compression.
+The content layer format is up to the artifact author and may utilize standard or custom formats. Authors are encouraged to utilize existing formats which may benefit from existing libraries to parse those formats. Authors may choose to persist individual files with standard or custom formats, such as `.json`, `.yaml`, `.bin`, `.sif`, or store a collection of files as a `.tar` archive. Optionally, the author MAY choose to compress the contents. The extension of the `layer.mediaType` MUST reflect the format of the blob and its optional compression.
 
 Artifacts authors may define different layers for a range of reasons:
 
 1. Split layers due to size:
     - Splitting an artifact into multiple layers enables concurrent downloading.
     - Some artifacts will benefit from common layers, as OCI Images have common base layers and/or common framework/runtime layers.  
-    In this case, the layers are ordinal where each layer overlays the previous layer, creating a unified collection of files.  
+    In this case, the layers are ordered where each layer overlays the previous layer, creating a unified collection of files.  
     All layer types are the same, with the position in the index being the important aspect.
 1. Split layers for different groupings, reuse and optimization:
     - An artifact may have non-unique environmental config and runtime collections of files. The runtime layer is sent to a host, while the configuration information may be sent to another location on the same host, or to a different host altogether.
     - Layers may split for different localization options, where an artifact client can determine which layers it requires for locales and language requirements. The runtime layer, or the localization layers may be individually updated, isolating the storage and download time for delta changes.
     - Layers may include optional source code, licenses or software bill of materials (SBoM) that are required for legal requirements or policy management. Different elements of a pipeline may pull the layers they require, while saving bandwidth, memory and compute processing for the layers they don't require.
-    - In these cases, the ordinal positioning of the layer isn't important, rather the sub-type of the layer identifies its purpose.
+    - In these cases, the ordered position of the layer isn't important, rather the sub-type of the layer identifies its purpose.
 
 #### De-duping Layers
 
@@ -144,11 +138,11 @@ Layer formats that may change should define a version to future proof new enhanc
 1. **Existing generic formats**: as defined by [IANA][iana-media-types].  
     These types are neither artifact nor `vendor|org|entity` specific, nor are they versioned.  
     Generic formats enable simple single layer scenarios, or where there's little to no differentiation between the different layers.
+    - [text/*](https://www.iana.org/assignments/media-types/media-types.xhtml#text)
     - [application/json](https://www.iana.org/assignments/media-types/application/json)
-    - [application/text/*](https://www.iana.org/assignments/media-types/media-types.xhtml#text)
     - [application/xml](https://www.iana.org/assignments/media-types/application/xml)
 1. **Vendor|Org|Entity definitions**: identify different versioned layer types within the same artifact.  
-    Unique definitions enable layers to be handled individually without assuming ordinal positioning. Each layer may use an existing [IANA][iana-media-types] format, but represent different usages within the artifact type.  
+    Unique definitions enable layers to be handled individually without assuming ordered positioning. Each layer may use an existing [IANA][iana-media-types] format, but represent different usages within the artifact type.  
     A Registry Doc artifact (`application/vnd.oci.sample-repo-doc.config.v1`) which represents the contents of a repo cloud be represented as:
     - `application/vnd.oci.sample-repo-doc.summary.layer.v1.md` - used as the readme of a repo, displayed on a registry webpage.
     - `application/vnd.oci.sample-repo-doc.content.layer.v1.tar` - provides detailed documentation, including multiple `.md` files for offline reading.
@@ -194,6 +188,9 @@ Distribution instances MAY:
 - Parse and process the contents of  `manifest.config`, based on the provided schema of `manifest.config.mediaType`, offering additional information or actions.
 - Ignore the contents and validation of the `config` object.
 
+## Registering Unique Types with IANA
+
+New artifact types SHOULD register their unique `config.mediaType` and unique `layer.mediaType` with IANA to assure ownership of the type. [Well-known][def-well-known-types] types MUST register their unique `mediaTypes` to be published for registry consumption.
 
 ## References
 
@@ -229,4 +226,3 @@ RFC reference:
 [singularity]:                   https://github.com/sylabs/singularity
 [sylabs]:                        https://sylabs.io/
 [zstd]:                          https://tools.ietf.org/html/rfc8478
-
