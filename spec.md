@@ -20,7 +20,7 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 
 ## Scope
 
-Create a first version of the Artifacts specification that is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifacts including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
+Create a first version of the Artifacts specification that is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifact types including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
 
 **v1.0 of the image-spec** defines index and manifest.
 
@@ -38,7 +38,7 @@ Future versions of this specification will support new artifact types representi
 
 As registries become content addressable distribution points, tools that pull artifacts must know if they can operate on the artifact. Artifact types are equivalent to file extensions.
 
-As a set of comparison use cases:
+As a set of comparable file extension use cases:
 
 - When users open files, the host operating system typically launches the appropriate program.
 - When users open a file, from within a program, the open dialog filters to the supported types.
@@ -49,7 +49,7 @@ This OCI Artifacts specification enables these use cases for [OCI distribution s
 
 ### Visualizing Artifacts
 
-The manifest `config.mediaType` is the equivalent of a file extension, enabling artifact type differentiation. Once complete artifacts can be identified and visualized as the following `config.mediaTypes`:
+The manifest `config.mediaType` is the equivalent of a file extension, enabling artifact type differentiation. An example of completed artifacts follows:
 
 |Icon|Artifact|`config.mediaType`|
 |-|-|-|
@@ -59,7 +59,7 @@ The manifest `config.mediaType` is the equivalent of a file extension, enabling 
 
 ## Defining a Unique Artifact Type
 
-A unique artifact is similar to defining a file extension. Defining a unique artifact allows various tools to know how to uniquely work with the type. It allows a registry to display the type, and vulnerability scanners a means to know if and how they should scan the contents.
+A unique artifact type is similar to defining a file extension. Defining a unique artifact allows various tools to know how to uniquely work with the type. It allows a registry to display the type and tooling (such vulnerability scanners) a means to know if and how they should interact with the contents.
 
 Defining a unique type involves uniqueness for computer processing, and uniqueness for humans.
 
@@ -94,7 +94,7 @@ See [visualizing artifacts](#visualizing-artifacts) for additional `mediaType` e
 
 ## Defining Supported Layer Types
 
-The content of an artifact are represented through a collection of layers and an optional config object. The layers of an artifact may be independent files, collections of files, or ordered layered tarballs persisted as blobs within a registries storage provider.
+The content of an artifact is represented through a collection of layers and an optional config object. The layers of an artifact may be independent files, collections of files, or ordered collection of tarballs persisted as blobs within a registries storage provider.
 
 Defining artifact layers involves:
 
@@ -104,7 +104,7 @@ Defining artifact layers involves:
 
 As an example, [OCI Images][image-layer] are represented through an ordered collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer.
 
-Some artifacts may be represented as a single file, such as config artifact representing a deployment details. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients. How an artifact client processes layers, merging them with overlay, or extracting them to different locations or hosts is up to the artifact authors.
+Some artifacts may be represented as a single file, such as a config artifact representing a deployment details for an application. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients. How an artifact client processes layers, merging them with overlay, or extracting them to different locations or hosts is up to the artifact authors.
 
 ### Layer Content Format
 
@@ -121,7 +121,7 @@ Artifacts authors may define different layers for a range of reasons:
     - An artifact may have non-unique environmental config and runtime collections of files. The runtime layer is sent to a host, while the configuration information may be sent to another location on the same host, or to a different host altogether.
     - Layers may split for different localization options, where an artifact client can determine which layers it requires for locales and language requirements. The runtime layer, or the localization layers may be individually updated, isolating the storage and download time for delta changes.
     - Layers may include optional source code, licenses or software bill of materials (SBoM) that are required for legal requirements or policy management. Different elements of a pipeline may pull the layers they require, while saving bandwidth, memory and compute processing for the layers they don't require.
-    - In these cases, the ordered position of the layer isn't important, rather the sub-type of the layer identifies its purpose.
+    - In these cases, the ordered position of the layer may not be important, rather the sub-type of the layer identifies its purpose.
 
 #### De-duping Layers
 
@@ -154,7 +154,7 @@ Layer formats that may change should define a version to future proof new enhanc
 - **`org|company|entity`** - represents an open source foundation (`oci`, `cncf`), a company or some unique entity.
 - **`layerType`** - a value representing the short name of the type.
 - **`optional-layerSubType`** - provides additional extensibility of a `layerType`
-- **`version`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process. The content format (json, yaml) may not revision, but the content within the layer may evolve. Using a version enables artifact tools to identify the format for processing.
+- **`version`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process. Using a version enables artifact tools to identify the format for processing.
 - **`fileFormat`** - provides for standard, or custom formats, enabling artifact authors to leverage existing or custom content processing libraries.
 - **`optional-compressionFormat`** - in addition to the fileFormat, optional compression is used. (eg: `+gzip`, `+zstd`)
 
@@ -174,16 +174,16 @@ Layer formats that may change should define a version to future proof new enhanc
 
 ## Optional: Defining Config Schema
 
-When defining an artifact type, the persistance of the artifact may be broken up into content and configuration. Configuration may be stored as a layer, or it may be stored and referenced by the `manifest.config`.
+When defining an artifact type, the persistence of the artifact may be broken up into content and configuration. Configuration may be stored as a layer, or it may be stored and referenced by the `manifest.config`.
 
 While the value of `manifest.config.mediaType` is used to determine the artifact type, the persistance of a `config` object is OPTIONAL. Artifacts can push a null reference for `config.json` persistance.
 
 Some benefits of placing content in `manifest.config` include:
 
-- Tooling can pull the configuration object prior to layers. An artifact component may use the config to determine how and where the layer should be instanced. The artifact component might send layer request to different compute instances; such as OCI Image layers being sent to a Windows or Linux Hosts.
+- Tooling can pull the configuration object prior to layers. An artifact component may use the config to determine how and where the layer should be instantiated. The artifact component might send layer request to different compute instances; such as OCI Image layers being sent to a Windows or Linux Hosts.
 - Registries may opt-into parsing the configuration if it provides meaningful top-level information. For example, [OCI Image Config][image-spec-config] stores `OS`, `Architecture` and `Platform` information that some registry operators may wish to display. The config is easy to pull & parse, as opposed to getting a layer url to pull, possibly decompress and parse.
 
-Distribution instances MAY:
+Registries which implement the artifact spec MAY:
 
 - Parse and process the contents of  `manifest.config`, based on the provided schema of `manifest.config.mediaType`, offering additional information or actions.
 - Ignore the contents and validation of the `config` object.
