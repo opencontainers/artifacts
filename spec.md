@@ -1,8 +1,8 @@
 # Open Container Initiative
 
-## Artifacts Specification
+## OCI Artifacts Support
 
-This Artifacts Spec provides a reference for artifact authors and registry implementors to support new artifact types with pre 1.0 implementations of the [distribution-spec][distribution-spec]. More particularly this repository (spec) has been tasked by the OCI TOB to serve 3 primary goals:
+OCI Artifacts provides a reference for artifact authors and registry implementors to support new artifact types with pre 1.0 implementations of the [distribution-spec][distribution-spec]. More particularly this repository has been [tasked by the OCI TOB to serve 3 primary goals](https://github.com/opencontainers/tob/blob/master/proposals/artifacts.md):
 
 1. **Artifact Authors** - guidance for authoring new artifact types. Including a clearing house for [well known][def-well-known-types] artifact types.
 1. **Registry Operators and Vendors** - guidance for how operators and vendors can support new artifact types, including how they can opt-in or out of well known artifact types. Registry operators that already implement `mediaType` filtering will not have to change. The artifact repo will provide context on how new `mediaTypes` can be used, and how `mediaTypes` can be associated with a type of artifact.
@@ -20,32 +20,28 @@ This Artifacts Spec provides a reference for artifact authors and registry imple
 
 ## Scope
 
-Create a first version of the Artifacts specification that is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifact types including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
-
-**v1.0 of the image-spec** defines index and manifest.
+Create a first version of Artifacts support which is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifact types including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
 
 <img src="./media/image-spec-objects.png" width=500x>
-
-**Artifacts 1.0** utilize manifest and index to represent multiple artifact types, including the [OCI Image-spec][image-spec]
 
 <img src="./media/artifacts-spec-objects.png" width=500x>
 
 ### Future Scope
 
-Future versions of this specification will support new artifact types representing collections of artifacts using [OCI Index][image-index]. A means to identify an index as a type of artifact will be required.
+Future versions will support new artifact types representing collections of artifacts using [OCI Index][image-index]. A means to identify an index as a type of artifact will be required.
 
 ## Defining OCI Artifact Types
 
 As registries become content addressable distribution points, tools that pull artifacts must know if they can operate on the artifact. Artifact types are equivalent to file extensions.
 
-As a set of comparable file extension use cases:
+A set of comparable file extension use cases include:
 
 - When users open files, the host operating system typically launches the appropriate program.
 - When users open a file, from within a program, the open dialog filters to the supported types.
 - When search or security software scan the contents of a storage solution, the software must know how to process the different types of content.
 - When users view the storage contents, information about the content is rendered based on the derived type(s) of the content being shown.
 
-This OCI Artifacts specification enables these use cases for [OCI distribution spec][distribution-spec] based registries by specifying a `manifest.config.mediaType` on the content pushed to a registry.
+OCI Artifacts enables these use cases for [OCI distribution spec][distribution-spec] based registries by specifying a `manifest.config.mediaType` on the content pushed to a registry.
 
 ### Visualizing Artifacts
 
@@ -78,9 +74,9 @@ The following `config.mediaType` format is used to differentiate the type of art
 - **`registration-tree`** - represents an IANA root tree. See [iana registration trees][iana-trees] for public and private tree options.
 - **`org|company|entity`** - represents an open source foundation (`oci`, `cncf`) or a company (`microsoft`, `ibm`) or some unique entity.
 - **`objectType`** - a value representing the short name of the type.
-- **`optionalSubType`** - provides additional extensibility of an `objectType`
+- **`optional-subType`** - provides additional extensibility of an `objectType`
 - **`version`** - provides artifact authors the ability to revision their schemas and formatting, enabling tools to identify which format they will process.
-- **`optional-configFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided, `.json`, `.yaml|yml` or other standard textual formats are preferred. By utilizing standard text formats, registry operators MAY parse the contents to provide additional context to users. If the config object is null, the `optional-configFormat` MUST be empty.
+- **`optional-configFormat`** - while `config.mediaType` represents the unique identifier of an artifact, providing a config object is optional. If a config object is provided, `.json`, `.yaml` or other standard textual formats are preferred. By utilizing standard text formats, registry operators MAY parse the contents to provide additional context to users. If the config object is null, the `optional-configFormat` MUST be empty.
 
 ### Example `config.mediaTypes`
 
@@ -102,7 +98,7 @@ Defining artifact layers involves:
 1. [Optional versioning of layer content](#layer-versioning)
 1. [Defining `layer.mediaTypes`](#defining-layermediatypes)
 
-As an example, [OCI Images][image-layer] are represented through an ordered collection of tar archives. Each blob represents a layer. Each layer overlays the previous layer.
+As an example, [OCI Images][image-layer] are represented through an ordered collection of tar archives. Each tar archive represents a layer. Each layer overlays the previous layer.
 
 Some artifacts may be represented as a single file, such as a config artifact representing a deployment details for an application. While other artifacts may include a config object, and a collection of binaries compressed as yet another layer. By separating the layers, the artifact author can benefit from layer de-duplication and concurrent downloading of each layer using various distribution-spec clients. How an artifact client processes layers, merging them with overlay, or extracting them to different locations or hosts is up to the artifact authors.
 
