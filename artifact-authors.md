@@ -8,7 +8,7 @@ OCI Artifacts provides a reference for artifact authors and registry implementor
 1. **Registry Operators and Vendors** - guidance for how operators and vendors can support new artifact types, including how they can opt-in or out of well known artifact types. Registry operators that already implement `mediaType` filtering will not have to change. The artifact repo will provide context on how new `mediaTypes` can be used, and how `mediaTypes` can be associated with a type of artifact.
 1. **Clearing House for [Well-known Artifacts][def-well-known-types]** - artifact authors can submit their artifact definitions, providing registry operators a list by which they can easily support.
 
-## Table of Contents
+## Dependencies for the Guidance Provided by this Reference
 
 - [Scope](#scope)
 - [Defining OCI Artifact Types](#defining-oci-artifact-types)
@@ -20,7 +20,7 @@ OCI Artifacts provides a reference for artifact authors and registry implementor
 
 ## Scope
 
-Create a first version of Artifacts support which is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifact types including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
+This reference is dependent on [OCI manifest][image-manifest] 1.0 to represent individual artifact types including [OCI Image][image-spec], [Helm][helm] and [Singularity][singularity].
 
 <img src="./media/image-spec-objects.png" width=500x>
 
