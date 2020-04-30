@@ -9,7 +9,7 @@ Utilizing the [manifest][image-manifest] and [index][image-index] definitions, n
 This repository provides a reference for artifact authors and registry implementors for supporting new artifact types with the existing implementations of distribution.
 More particularly this repository has been tasked by the [OCI TOB](https://github.com/opencontainers/tob/blob/master/proposals/artifacts.md) to serve 3 primary goals:
 
-1. **artifact authors** - guidance for authoring new artifact types. Including a clearing house for well known artifact types.
+1. **artifact authors** - [guidance for authoring new artifact types.][artifact-authors] Including a clearing house for well known artifact types.
 1. **registry operators and vendors** - guidance for how operators and vendors can support new artifact types, including how they can opt-in or out of well known artifact types. Registry operators that already implement `media-type` filtering will not have to change. The artifact repo will provide context on how new `media-type`s can be used, and how `media-type`s can be associated with a type of artifact.
 1. **clearing house for well known artifacts** - artifact authors can submit their artifact definitions, providing registry operators a list by which they can easily support.
 
@@ -17,12 +17,13 @@ By providing an OCI artifact definition, the community can continue to innovate,
 
 ## Table of Contents
 
-* [The Apache License, Version 2.0](LICENSE)
-* [Maintainers](MAINTAINERS)
-* [Maintainer guidelines](MAINTAINERS_GUIDE.md)
-* [Contributor guidelines](CONTRIBUTING.md)
-* [Project governance](GOVERNANCE.md)
-* [Release procedures](RELEASES.md)
+- [Artifact Authors- How To][artifact-authors]
+- [The Apache License, Version 2.0](LICENSE)
+- [Maintainers](MAINTAINERS)
+- [Maintainer guidelines](MAINTAINERS_GUIDE.md)
+- [Contributor guidelines](CONTRIBUTING.md)
+- [Project governance](GOVERNANCE.md)
+- [Release procedures](RELEASES.md)
 
 ## Code of Conduct
 
@@ -46,9 +47,10 @@ Artifacts will reference specific [distribution][distribution-spec], [index][ima
 
 A: No.  Artifacts are a prescriptive means of storing [index][image-index] and [manifest][image-manifest] within [distribution][distribution-spec] implementations.
 
-[distribution-spec]: https://github.com/opencontainers/distribution-spec/
-[code-of-conduct]: https://github.com/opencontainers/org/blob/master/CODE_OF_CONDUCT.md
-[image-manifest]: https://github.com/opencontainers/image-spec/blob/master/manifest.md
-[image-index]: https://github.com/opencontainers/image-spec/blob/master/image-index.md
-[distribution]: https://github.com/docker/distribution
-[singularity]: https://github.com/sylabs/singularity
+[artifact-authors]:     ./artifact-authors.md
+[code-of-conduct]:      https://github.com/opencontainers/org/blob/master/CODE_OF_CONDUCT.md
+[distribution]:         https://github.com/docker/distribution
+[distribution-spec]:    https://github.com/opencontainers/distribution-spec/
+[image-index]:          https://github.com/opencontainers/image-spec/blob/master/image-index.md
+[image-manifest]:       https://github.com/opencontainers/image-spec/blob/master/manifest.md
+[singularity]:          https://github.com/sylabs/singularity
