@@ -2,7 +2,7 @@
 
 ## Artifact Guidance Documents
 
-1. [Arifact Author Guidance](./artifact-authors.md)
+1. [Artifact Author Guidance](./artifact-authors.md)
 
 ## Supporting Documents
 
