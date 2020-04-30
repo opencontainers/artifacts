@@ -1,5 +1,15 @@
 # OCI Artifacts
 
+## Artifact Guidance Documents
+
+1. [Arifact Author Guidance](./artifact-authors.md)
+
+## Supporting Documents
+
+- [Term Definitions](./definitions-terms.md)
+
+## Project Introduction and Scope
+
 Container registries, implementing the [distribution-spec][distribution-spec], provide reliable, highly scalable, secured storage services for container images. Customers either use a cloud provider implementation, vendor implementations, or instance the open source implementation of [distribution][distribution]. They configure security and networking to assure the images in the registry are locked down and accessible by the resources required. Cloud providers and vendors often provide additional values atop their registry implementations from security to productivity features.
 
 Applications and services typically require additional artifacts to deploy and manage, including [helm](https://helm.sh) for deployment and [Open Policy Agent (OPA)](https://github.com/open-policy-agent/opa/issues/1413) for policy enforcement.
@@ -15,7 +25,7 @@ More particularly this repository has been tasked by the [OCI TOB](https://githu
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution (YASS).
 
-## Table of Contents
+## Project Governance and License
 
 - [Artifact Authors- How To][artifact-authors]
 - [The Apache License, Version 2.0](LICENSE)

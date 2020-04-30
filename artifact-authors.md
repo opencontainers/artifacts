@@ -1,4 +1,7 @@
-# Open Container Initiative
+# Open Containers Initiative
+
+## Artifact Authors Guidance
+This reference provides guidance for authoring new artifact types.
 
 ## OCI Artifacts Support
 
