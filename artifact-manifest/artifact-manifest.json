@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
-  "mediaType": "application/vnd.oci.artifact.collection.v1+json",
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
   "config": {
-    "mediaType": "application/vnd.oci.artifact.collection.config.v1+json",
+    "mediaType": "application/vnd.oci.artifact.manifest.config.v1+json",
     "size": 7023,
     "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
   },
@@ -23,6 +23,11 @@
       "digest": "sha256:ec4b8955958665577945c89419d1af06b5f7636b4ac3da7f12184802ad867736"
     }
   ],
+  "dependencies":[
+    {
+      
+    }
+  ],
   "references": [
     {
       "mediaType": "image|index|signature|helm|CNAB|...",
@@ -39,5 +44,18 @@
       "digest": "---",
       "refType": "hard|soft"
     }
-  ]
+  ],
+  "annotations": {
+    "org.opencontainers.artifact.created": "",
+    "org.opencontainers.artifact.authors": "",
+    "org.opencontainers.artifact.url": "opencontainers.org",
+    "org.opencontainers.artifact.documentation": "opencontainers.org",
+    "org.opencontainers.artifact.source": "https://github.com/opencontainers/artifacts",
+    "org.opencontainers.artifact.version": "v1.0",
+    "org.opencontainers.artifact.revision": "v1.1.0",
+    "org.opencontainers.artifact.vendor": "Open Containers Initiative",
+    "org.opencontainers.artifact.licenses": "MIT",
+    "org.opencontainers.artifact.title": "Open Containers Artifact Manifest",
+    "org.opencontainers.artifact.description": "A schema for defining artifacts"
+  }
 }

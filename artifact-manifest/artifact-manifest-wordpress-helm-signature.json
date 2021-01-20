@@ -7,10 +7,6 @@
     "size": 0,
     "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
   },
-  "parent": {
-    "mediaType": "application/vnd.oci.image.index.v1.config.json",
-    "reference": "/wordpress:5.7"
-  },
   "blobs": [
     {
       "mediaType": "application/vnd.cncf.notary.v2.json",
@@ -19,16 +15,13 @@
       "reference": "registry.wabbitnetworks.io"
     }
   ],
-  "dependencies": [
+  "references": [
     {
       "mediaType": "application/vnd.oci.image.index.v1.config.json",
-      "reference": "/wordpress:5.7",
-      "depType": "hard"
-    },
-    {
-      "mediaType": "application/vnd.oci.image.index.v1.config.json",
-      "reference": "/mysql:3.1",
-      "depType": "hard"
+      "reference": "/wordpress:5.7"
+      # digest not necessary as the signature has the digest embedded in it
     }
   ]
 }
+
+

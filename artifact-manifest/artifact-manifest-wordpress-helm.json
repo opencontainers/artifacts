@@ -19,40 +19,18 @@
       "size": 16724
     }
   ],
-  "dependencies": [
+  "references": [
     {
-      "mediaType": "application/vnd.oci.image.index.v1.config.json",
-      "reference": "/wordpress:5.7",
-      "depType": "soft"
-    },
-    {
+      "reference": "wordpress:5.7",
       "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
-      "reference": "/mysql:v3.1",
-      "depType": "soft"
+      "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
+      "size": 1510
     },
     {
+      "reference": "mysql:8",
       "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
-      "refType": "manifest",
-      "reference": "/wordpress@sha256:swo32498791238740124809sd098s7q40129874"
-    },
-    {
-    "comment": "this is a referenced helm chart",
-    "mediaType": "application/vnd.oci.artifact.manifest.v1.json",
-    "artifactType": "application/vnd.cncf.helm.v3",
-    "reference": "/wordpress:5.7"
+      "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
+      "size": 1578
     }
-  ],
-  "annotations": {
-    "org.opencontainers.artifact.created": "",
-    "org.opencontainers.artifact.authors": "",
-    "org.opencontainers.artifact.url": "opencontainers.org",
-    "org.opencontainers.artifact.documentation": "opencontainers.org",
-    "org.opencontainers.artifact.source": "https://github.com/opencontainers/artifacts",
-    "org.opencontainers.artifact.version": "v1.0",
-    "org.opencontainers.artifact.revision": "v1.1.0",
-    "org.opencontainers.artifact.vendor": "Open Containers Initiative",
-    "org.opencontainers.artifact.licenses": "MIT",
-    "org.opencontainers.artifact.title": "Open Containers Artifact Manifest",
-    "org.opencontainers.artifact.description": "A schema for defining artifacts"
-  }
+  ]
 }

@@ -1,10 +1,215 @@
 # OCI Artifact Manifest
 
-The OCI artifact manifest provides a means to define a wide range of artifacts, including a chain of dependencies of related artifacts. It provides a means to define a collection of items, including blobs and linked artifacts with the information needed for reference counting, garbage collection and indexing. 
+The OCI artifact manifest provides a means to define a wide range of artifacts, including a chain of dependencies of related artifacts. It provides a means to define multiple collections of types, including blobs, dependent artifacts and referenced artifacts. These collections provide the information required for validating an artifact and registry management including reference counting, garbage collection and indexing.
+
+- The content that directly represents the artifact are persisted as blobs
+- References to other artifacts, used to complete the scenario, but may not be stored within the same registry are represented as dependencies.
+- References made by enhancements to the artifact, such as a Notary v2 signature or an SBoM. These references are unknown by the target artifact, but may be deleted (ref counted) when the target artifact is deleted.
+
+## Scenarios
+
+### Copy Container Images
+
+![mysql image copy](./media/mysql-copy.svg)
+
+Copying a container from a public registry to a private registry would involve `docker pull`, `docker tag` and `docker push`
+
+```bash
+docker pull mysql:8
+docker tag mysql:8 registry.acmerockets.io/base-artifacts/mysql:8
+docker push registry.acmerockets.io/base-artifacts/mysql:8
+```
+
+The above commands account for the image manifest and the associated layers. Note the directionality of the manifest to layers references. A manifest declares the layers that must be accounted for before a manifest may be considered valid within a registry. In addition, most registries implement layer de-duping and reference counting to avoid maintaining multiple copies of the same layers.
+
+```json
+{
+  "schemaVersion": 2,
+  "config": {
+    "mediaType": "application/vnd.oci.image.config.v1+json",
+    "size": 7097,
+    "digest": "sha256:c8562eaf9d81c779cbfc318d6e01b8e6f86907f1d41233268a2ed83b2f34e748"
+  },
+  "layers": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "size": 27108069,
+      "digest": "sha256:a076a628af6f7dcabc536bee373c0d9b48d9f0516788e64080c4e841746e6ce6"
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "size": 1741,
+      "digest": "sha256:f6c208f3f991dcbc417fed8efde391f887c0551d77ed0c1a125fd28f4841e1cc"
+    }
+  ]
+}
+```
+
+### Container Image, with Signatures
+
+![mysql image copy](./media/mysql-with-sigs-copy.svg)
+
+In the above example, the layers have been removed for clarity. In this scenario, Notary v2 signatures have been added. Note the directionality of the Notary v2 signatures references. The `mysql:8` image has no reference to the signatures. The signatures may be added to existing artifacts.
+
+From a user experience perspective, copying a container from a public registry to a private registry would likely be expected to copy the signatures alongside the artifact they've signed.
+
+The `oci.artifact.manifest` supports the Notary v2 requirements, including:
+
+- support for additive signatures, assuring the target manifest digest and tag do not change
+- support for multiple signatures. In the above scenario, `mysql` signed the original image. As `mysql` was copied to Docker Hub, an additional `docker signature` was added, providing a certified content attestation. Once the image copy to ACME Rockets is completed, an additional `acmerockets signature` is added providing assurance the `mysql:8` image was security scanned and verified applicable to the ACME Rockets environment.
+
+From a user experience, the signature artifacts have no unique value beyond the artifact they represent, therefore they would be persisted to a registry in a form by which they are known to copy with the artifact, and be deleted when the artifact they are associated with is deleted.
+
+To support hard references, an additional dependencies collection is added to a new `application/vnd.oci.artifact.manifest.v1+json` schema. The `dependencies` collection declares the artifact the signature is dependent upon. Similar to pypi packages, the validation of dependencies are deferred. If the dependent artifacts are found, they are valid. Depending on the validation options, a signature may exist without its dependent artifact.
+
+```json
+{
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
+  "artifactType": "application/vnd.cncf.notary.v2",
+  "config": {
+    "mediaType": "application/vnd.cncf.notary.config.v2",
+    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7",
+    "size": 102
+  },
+  "blobs": [
+    {
+      "mediaType": "application/vnd.cncf.notary.v2.json",
+      "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+      "size": 32654,
+      "reference": "registry.wabbitnetworks.io"
+    }
+  ],
+  "dependencies": [
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1",
+      "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
+      "size": 16724,
+      "artifact": "mysql:3.1"
+    }
+  ]
+}
+```
+
+#### OCI-Registry CLI
+
+To copy the above image and the associated signatures, a new `oci-reg` cli is proposed.
+
+The following command would copy the `mysql:8` image from docker hub to the acmerockets registry. The CLI could be run within the source or target cloud. 
+
+```bash
+oci-reg copy \
+  --source hub.docker.io/mysql:8 \
+  --target registry.acme-rockets.io/base-artifacts/mysql:8
+```
+
+The `oci-reg copy` command would:
+
+- assure the manifest and layer/blob digests remain the same
+- copy any artifacts that are dependent on the source artifact-manifest, persisting them in the target registry.
+
+### Reference Artifacts
+
+There are a set of artifact types that declare references to other artifacts that may, or may not be stored in the same registry. The reference is important to note, indicating copying to be capable between environments, as well as generalized validation scenarios.
+
+#### Helm Reference
+
+![mysql image copy](./media/helm-chart-copy.svg)
+
+In the above scenario, a helm chart is copied from a public registry to the ACME Rockets registry. The `wordpress-chart:v5` is represented as an `application/vnd.oci.artifact.manifest.v1+json`. In addition to the Notary v2 signatures declaring a dependency on the `wordpress:v5` image, the `mysql:8` image, the `wordpress-chart:v5` helm chart can also represent signed content. The new references collection within the `oci.artifact.manifest` schema provides a means to identify the images the helm chart references.
+
+```json
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
+  "artifactType": "application/vnd.cncf.helm.v3",
+  "config": {
+    "mediaType": "application/vnd.cncf.helm.config.v1+json",
+    "size": 0,
+    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
+  },
+  "blobs": [
+    {
+      "mediaType": "application/vnd.cncf.helm.chart.v1.tar",
+      "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+      "size": 32654
+    },
+    {
+      "mediaType": "application/vnd.cncf.helm.values.v1.yaml",
+      "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
+      "size": 16724
+    }
+  ],
+  "references": [
+    {
+      "reference": "wordpress:5.7",
+      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
+      "size": 1510
+    },
+    {
+      "reference": "mysql:8",
+      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
+      "size": 1578
+    }
+  ]
+}
+```
+
+#### CNAB Reference
+
+A CNAB is yet another reference artifact. While the current CNAB spec incorporates the helm-cli ahd helm chart within an invocation image, the `artifact.manifest` provides more natural package management experiences where the references can be resolved based on the users intent.
+
+![mysql image copy](./media/wordpress-cnab-copy.svg)
+
+Similar to the Helm example, a CNAB is copied from a public registry to the ACME Rockets registry. The `wordpress-cnab:v5` CNAB declares references to an invocation image that includes the `helm-cli`. This provides an environment to run `helm install`. The CNAB includes an additional refernece to `wordpress-chart:v5`. The chart includes references to the `wordpress:v5` and `mysql:8` images. As the `oci-reg copy` command is executed, the graph of references may be expanded. As the copy proceeds, only those artifacts that don't already exist in the target registry are required to be copied. The CNAB and Helm `artifact.manifest` may declare how strict they wish to couple their references to **stable tags** or **unique digests**
+
+```json
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
+  "artifactType": "application/vnd.cncf.cnab.v1",
+  "config": {
+    "mediaType": "application/vnd.cncf.cnab.config.v1+json",
+    "size": 0,
+    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
+  },
+  "blobs": [
+    {
+      "mediaType": "application/vnd.cncf.cnab.v1.tar",
+      "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+      "size": 32654
+    },
+    {
+      "mediaType": "application/vnd.cncf.cnab.params.v1.json",
+      "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
+      "size": 16724
+    }
+  ],
+  "references": [
+    {
+      "reference": "wordpress-chart:v5",
+      "mediaType": "application/vnd.cncf.helm.v1.config.json",
+      "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
+      "size": 1510
+    },
+    {
+      "reference": "helm-cli:3",
+      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
+      "size": 1578
+    }
+  ]
+}
+```
+
+----
+# ADDITIONAL EDITING REQUIRED BEYOND THIS POINT
+----
 
 ## Goals of Artifact Manifest
 
-### Bi-directional Hierarchal Support
+### Bi-directional Hierarchies
 
 The OCI Distribution-spec 1.0 supports tops down hierarchies for tracking a manifest, a config object, and a collection of layers. This works well for immutable artifacts that are individually pushed to a registry. As an artifact is pushed, a manifest and digest of the manifest and it's referenced layers are computed.
 
@@ -31,6 +236,28 @@ Distribution-spec APIs will provide standard delete operations, including option
   - deleting the wordpress helm chart deletes the config, chart and values blobs
   - deleting the mysql image should warn if referenced by helm charts
   - deleting the wordpress chart removes a ref count to the mysql image, for mysql deletion
+
+## Link Types
+
+Artifact manifest will support bi-directional references enabling additional artifacts to be added to a registry after an artifact was persisted.
+
+As artifacts reference others, hard and soft references will be supported, enabling artifacts to be individually deleted, or an extent of the dependency graph to be removed.
+
+### Notes
+Artifact-manifest has 3 collections
+```json
+{
+  blobs:{}, physical content that is always associated with the object - just like oci image
+  dependencies:{} - can be loosely defined (cnab, helm)
+  references:{} - always copied (signature)
+}
+```
+
+# copy the helm chart, the images (if found) and all signatures found
+registry copy wordpress-helm:v1 
+
+# copy with limited references (signatures but not source)
+registry copy wordpress-helm:v1 --with-dependencies --filter-references "+notary.v2" "-gpl-source.v2"
 
 ## *Image Manifest* Property Descriptions
 
