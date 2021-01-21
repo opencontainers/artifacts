@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
+  "artifactType": "application/vnd.cncf.cnab.v1",
+  "config": {
+    "mediaType": "application/vnd.cncf.cnab.config.v1+json",
+    "size": 0,
+    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
+  },
+  "blobs": [
+    {
+      "mediaType": "application/vnd.cncf.cnab.v1.tar",
+      "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+      "size": 32654
+    },
+    {
+      "mediaType": "application/vnd.cncf.cnab.params.v1.json",
+      "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
+      "size": 16724
+    }
+  ],
+  "references": [
+    {
+      "reference": "wordpress-chart:v5",
+      "mediaType": "application/vnd.cncf.helm.v1.config.json",
+      "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
+      "size": 1510
+    },
+    {
+      "reference": "helm-cli:3",
+      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
+      "size": 1578
+    }
+  ]
+}

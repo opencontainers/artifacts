@@ -2,15 +2,47 @@
 
 The OCI artifact manifest provides a means to define a wide range of artifacts, including a chain of dependencies of related artifacts. It provides a means to define multiple collections of types, including blobs, dependent artifacts and referenced artifacts. These collections provide the information required for validating an artifact and registry management including reference counting, garbage collection and indexing.
 
-- The content that directly represents the artifact are persisted as blobs
-- References to other artifacts, used to complete the scenario, but may not be stored within the same registry are represented as dependencies.
-- References made by enhancements to the artifact, such as a Notary v2 signature or an SBoM. These references are unknown by the target artifact, but may be deleted (ref counted) when the target artifact is deleted.
+OCI Artifact Manifests provide the following types of references:
 
-## Scenarios
+1. Content that represents the artifact, persisted as blobs. These are analogues to layers from the OCI Image manifest and Config objects. Layers are renamed blobs as they represent a generic collection of content, as opposed to an ordered layered collection as defined by OCI Image Manifest. An artifact may treat them as ordered, but it is not required.
+1. Loose references to other artifacts, used to complete a scenario, but may not be stored within the same repository or registry. These references are defined by the source artifact and known at the time of upload to a registry, such as a Helm chart that references other images. These references are included in the manifest and computed in the digest of the manifest.
+1. References made by enhancements to the artifact, such as a Notary v2 signature or an SBoM. These references are unknown by the original artifact as they are added at a later time. A registry would need to index these references as registry apis would request all content related to the source artifact.
+
+## Supported Artifact Types
+
+Artifact Manifest is intended to support the following scenarios:
+
+### OCI Image
+
+An OCI Image is based on the oci-image-manifest. It's shown as a comparison to the examples below.
+
+![OCI Image](media/wordpress-image-layers.svg)
+
+### Notary v2 Signature Persistance
+
+A Notary v2 signature would persist as a manifest with a config object and a signature, persisted as a blobs.
+
+![notary v2 signature](media/notaryv2-signature.svg)
+
+The Notary v2 signature would reference an artifact, such as the `wordpress:v5` image above. Notice the directionality of the references. One or more signatures may be added to a registry after the image was persisted. While an image knows of it's layers, and a Notary v2 signature knows of its config and blob, the Notary v2 signature has a reference to the artifact its signing.
+
+![wordpress image with layers](media/wordpress-image-layers-sig.svg)
+
+### Helm Charts & CNAB
+
+A Helm chart can represent the images it references within the chart. These references are loose references as they may be persisted in different registries, or may change as a values file is updated. However, the chart may also be persisted together as a collection of artifacts in a registry.
+
+![Wordpress Helm Chart](media/wordpress-helm-chart.svg)
+
+A CNAB may also be persisted as a CNAB document that contains the configuration information, along with its invocation image. Notice the reference to the `helm-cli:v3` is a hard reference. This allows the helm-cli to be deleted *(ref-count -1)* when the parent cnab is deleted. As the CNAB references a Helm chart, the `wordpress-chart:v5` is also represented as a loose reference, which then references the images required to instance wordpress.
+
+![Wordpress CNAB](media/wordpress-cnab.svg)
+
+## Supported Scenarios
 
 ### Copy Container Images
 
-![mysql image copy](./media/mysql-copy.svg)
+![mysql image copy](media/mysql-copy.svg)
 
 Copying a container from a public registry to a private registry would involve `docker pull`, `docker tag` and `docker push`
 
@@ -84,7 +116,7 @@ To support hard references, an additional dependencies collection is added to a 
       "mediaType": "application/vnd.oci.image.manifest.v1",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
       "size": 16724,
-      "artifact": "mysql:3.1"
+      "artifact": "mysql:8"
     }
   ]
 }
@@ -113,7 +145,7 @@ There are a set of artifact types that declare references to other artifacts tha
 
 #### Helm Reference
 
-![mysql image copy](./media/helm-chart-copy.svg)
+![mysql image copy](./media/wordpress-helm-chart-copy.svg)
 
 In the above scenario, a helm chart is copied from a public registry to the ACME Rockets registry. The `wordpress-chart:v5` is represented as an `application/vnd.oci.artifact.manifest.v1+json`. In addition to the Notary v2 signatures declaring a dependency on the `wordpress:v5` image, the `mysql:8` image, the `wordpress-chart:v5` helm chart can also represent signed content. The new references collection within the `oci.artifact.manifest` schema provides a means to identify the images the helm chart references.
 
