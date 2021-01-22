@@ -1,16 +1,24 @@
 # OCI Artifact Manifest
 
-The OCI artifact manifest provides a means to define a wide range of artifacts, including a chain of dependencies of related artifacts. It provides a means to define multiple collections of types, including blobs, dependent artifacts and referenced artifacts. These collections provide the information required for validating an artifact and registry management including reference counting, garbage collection and indexing.
+The OCI artifact manifest provides a means to define a wide range of artifacts, including a chain of dependencies of related artifacts. It provides a means to define multiple collections of types, including blobs, dependent artifacts and referenced artifacts. 
+
+These collections provide the information required for:
+
+- validating an artifact,
+- registry management and visualizations
+- deletion management, including reference counting, garbage collection & 
+- indexing for artifact discover, along with it's related content
+- copying within & across registries
 
 OCI Artifact Manifests provide the following types of references:
 
-1. Content that represents the artifact, persisted as blobs. These are analogues to layers from the OCI Image manifest and Config objects. Layers are renamed blobs as they represent a generic collection of content, as opposed to an ordered layered collection as defined by OCI Image Manifest. An artifact may treat them as ordered, but it is not required.
-1. Loose references to other artifacts, used to complete a scenario, but may not be stored within the same repository or registry. These references are defined by the source artifact and known at the time of upload to a registry, such as a Helm chart that references other images. These references are included in the manifest and computed in the digest of the manifest.
-1. References made by enhancements to the artifact, such as a Notary v2 signature or an SBoM. These references are unknown by the original artifact as they are added at a later time. A registry would need to index these references as registry apis would request all content related to the source artifact.
+1. **Blobs:** Content that represents the artifact. These are analogues to layers from the OCI Image manifest and Config objects. Layers are renamed blobs as they represent a generic collection of content, as opposed to an ordered layered collection as defined by OCI Image Manifest. An artifact may treat them as ordered, but it is not required.
+1. **References** to other artifacts, used to complete a scenario, but may not be stored within the same repository or registry. These references are defined by the source artifact and known at the time of upload to a registry, such as a Helm chart that references other images. These references are included in the manifest and computed in the digest of the manifest.
+1. **Dependencies** on other artifacts that enhance the content, such as a Notary v2 signature or an SBoM. These dependencies are *unknown* by the original artifact as they are added at a later time. A registry would need to index these references as registry apis would request all content related to the source artifact.
 
 ## Supported Artifact Types
 
-Artifact Manifest is intended to support the following scenarios:
+Artifact manifest is intended to support the following artifact types:
 
 ### OCI Image
 
@@ -20,25 +28,49 @@ An OCI Image is based on the oci-image-manifest. It's shown as a comparison to t
 
 ### Notary v2 Signature Persistance
 
-A Notary v2 signature would persist as a manifest with a config object and a signature, persisted as a blobs.
+A Notary v2 signature would persist as a manifest with a config object and a signature, persisted as a blob. However, the signature has no value unto itself. A signature is applied to a given artifact. It's said to be dependent upon another artifact to be complete.
 
 ![notary v2 signature](media/notaryv2-signature.svg)
 
-The Notary v2 signature would reference an artifact, such as the `wordpress:v5` image above. Notice the directionality of the references. One or more signatures may be added to a registry after the image was persisted. While an image knows of it's layers, and a Notary v2 signature knows of its config and blob, the Notary v2 signature has a reference to the artifact its signing.
+The Notary v2 signature would reference an artifact, such as the `wordpress:v5` image above. Notice the directionality of the references. One or more signatures may be added to a registry after the image was persisted. While an image knows of it's layers, and a Notary v2 signature knows of its config and blob, the Notary v2 signature declares a dependency to the artifact it's signing. The visualization indicates the references through solid lines as these reference types are said to be hard references. Just as the layers of an OCI Image are deleted (*ref-counted -1*), the blobs of a signature are deleted (*ref-counted -1*) when the signature is deleted. Likewise, when an artifact is deleted, the signature would be deleted (*ref-counted -1*) as the signatures have no value without the artifact they are signing.
 
 ![wordpress image with layers](media/wordpress-image-layers-sig.svg)
 
 ### Helm Charts & CNAB
 
-A Helm chart can represent the images it references within the chart. These references are loose references as they may be persisted in different registries, or may change as a values file is updated. However, the chart may also be persisted together as a collection of artifacts in a registry.
+A Helm chart can represent the images it references within the chart. These references are loose references as they may be persisted in different registries, or may change as a values file is updated. However, the chart may also be persisted together as a collection of artifacts in a registry. The lines are dotted to represent the loose reference. Deleting the `wordpress-chart:v5` may, or may not delete the images as the images have value unto themselves.
 
 ![Wordpress Helm Chart](media/wordpress-helm-chart.svg)
 
-A CNAB may also be persisted as a CNAB document that contains the configuration information, along with its invocation image. Notice the reference to the `helm-cli:v3` is a hard reference. This allows the helm-cli to be deleted *(ref-count -1)* when the parent cnab is deleted. As the CNAB references a Helm chart, the `wordpress-chart:v5` is also represented as a loose reference, which then references the images required to instance wordpress.
+A CNAB may also be persisted with configuration information, along with a reference to its invocation image. The reference to the `helm-cli:v3` is solid line/hard reference. This allows the helm-cli to be deleted *(ref-count -1)* when the parent cnab is deleted. As the CNAB references a Helm chart, the `wordpress-chart:v5` is also represented as a loose reference as the helm chart and referenced images have value unto themselves.
 
 ![Wordpress CNAB](media/wordpress-cnab.svg)
 
 ## Supported Scenarios
+
+The main scenarios include:
+
+1. Discovery of content within a registry for content listing through CLI and visualizations.
+1. Copying within and across registries.
+1. Deletion management, providing information to de-dupe content with reference counting.
+1. Support enhancing information related to existing content. Such as adding a Notary v2 signature or SBoM.
+1. Validation, with required and optional references.
+
+### Content Discovery
+
+Registries today support a flat list of content within designated repositories. A container image, multi-arch container image, Helm Chart, CNAB, Singularity, WASM and other OCI Artifact types can be listed based on their `manifest.config.mediaType`
+
+![flat listing of OCI artifacts](media/repo-listing-flat.svg)
+
+In the above example, all the artifacts are displayed without relation to each other. The layers of the `:v5` are also displayed as an example of data that is already hidden.
+
+![flat listing of OCI artifacts](media/repo-listing-attributed.svg)
+
+In the above example, the Notary v2 signature, an SBoM and collection of attributes are displayed as directly associated with their primary artifact.
+
+![flat listing of OCI artifacts](media/repo-listing-attributed-expanded.svg)
+
+In the above case, the graph of references can be expanded showing the references across repositories. This visualization demonstrates the hierarchy known by the registry, based on the artifact-manifest. While an artifact icon is displayed, based on the `manifest.config.mediaType`, the registry need not know any of the artifact specific details to track this data. Registries would not need to parse the Helm Chart, the CNAB. Each artifact author will lift data elements for the objects they wish to reference in a registry.
 
 ### Copy Container Images
 
