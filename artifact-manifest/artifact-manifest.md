@@ -76,6 +76,43 @@ Artifacts that reference other artifacts must include an OCI Artifact Descriptor
 
 Clients MAY choose to bind to specific digests, assuring they are testing and using the exact graph initially specified. Or, clients may choose to float to a newer version of a tag, benefiting from patches. In all cases, a Notary v2 signature may be used to assure the artifacts are true to their initial ownership and authors.
 
+**Setting the default registry:**
+
+```bash
+oci-reg default-registry registry.acme-rockets.io
+```
+
+**Setting repository mappings for where to push and pull unqualified artifacts:**
+
+`oci-reg.config`
+
+```json
+{
+  "root-namespace": "dev"
+}
+```
+
+**Setting repository mappings for specific artifacts:**
+
+`oci-reg.config`
+
+```json
+{
+  "default-registry": "registry.acme-rockets.io",
+  "root-namespace": "prod",
+  "repo-mappings": [
+    {
+      "repo": "wordpress-chart",
+      "path": "/charts"
+    },
+    {
+      "repo": "wordpress-cnab",
+      "path": "/cnabs"
+    }
+  ]
+}
+```
+
 ## Supported Artifact Types
 
 Artifact manifest is intended to support the following artifact types:
