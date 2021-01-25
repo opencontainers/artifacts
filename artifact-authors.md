@@ -58,7 +58,7 @@ The manifest `config.mediaType` is the equivalent of a file extension, enabling 
 
 ## Defining a Unique Artifact Type
 
-A unique artifact type is similar to defining a file extension. Defining a unique artifact allows various tools to know how to uniquely work with the type. It allows a registry to display the type and tooling, such vulnerability scanners, a means to know if and how they should interact with the contents.
+A unique artifact type is similar to defining a file extension. Defining a unique artifact allows various tools to know how to uniquely work with the type. It allows a registry to display the type and tooling, such as vulnerability scanners, a means to know if and how they should interact with the contents.
 
 Defining a unique type involves uniqueness for computer processing, and uniqueness for humans.
 
