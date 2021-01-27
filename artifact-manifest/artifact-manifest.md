@@ -76,43 +76,6 @@ Artifacts that reference other artifacts must include an OCI Artifact Descriptor
 
 Clients MAY choose to bind to specific digests, assuring they are testing and using the exact graph initially specified. Or, clients may choose to float to a newer version of a tag, benefiting from patches. In all cases, a Notary v2 signature may be used to assure the artifacts are true to their initial ownership and authors.
 
-**Setting the default registry:**
-
-```bash
-oci-reg default-registry registry.acme-rockets.io
-```
-
-**Setting repository mappings for where to push and pull unqualified artifacts:**
-
-`oci-reg.config`
-
-```json
-{
-  "root-namespace": "dev"
-}
-```
-
-**Setting repository mappings for specific artifacts:**
-
-`oci-reg.config`
-
-```json
-{
-  "default-registry": "registry.acme-rockets.io",
-  "root-namespace": "prod",
-  "repo-mappings": [
-    {
-      "repo": "wordpress-chart",
-      "path": "/charts"
-    },
-    {
-      "repo": "wordpress-cnab",
-      "path": "/cnabs"
-    }
-  ]
-}
-```
-
 ## Supported Artifact Types
 
 Artifact manifest is intended to support the following artifact types:
@@ -238,17 +201,14 @@ To support hard references, an additional dependencies collection is added to a 
     {
       "mediaType": "application/vnd.cncf.notary.v2.json",
       "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
-      "size": 32654,
-      "reference": "registry.wabbitnetworks.io"
+      "size": 32654
     }
   ],
   "dependencies": [
     {
-      "artifact": "mysql:8",
-      "artifactType": "application/vnd.oci.image.manifest.v1.config.json",
       "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
-      "size": 16724,
+      "size": 16724
     }
   ]
 }
