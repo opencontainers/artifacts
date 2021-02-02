@@ -110,10 +110,10 @@ A CNAB may also be persisted with configuration information, along with a refere
 
 The main scenarios include:
 
-1. Discovery of content within a registry for content listing through CLI and visualizations.
+1. Discovery of content within a registry for content listing through a CLI and visualizations.
 1. Copying within and across registries.
 1. Deletion management, providing information to de-dupe content with reference counting.
-1. Support enhancing information related to existing content. Such as adding a Notary v2 signature or SBoM.
+1. Support enhancing information related to existing content. Such as adding a Notary v2 signature or SBoM artifacts.
 1. Validation, with required and optional references.
 
 ### Content Discovery
@@ -193,43 +193,50 @@ To support hard references, an additional dependencies collection is added to a 
   "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
   "artifactType": "application/vnd.cncf.notary.v2",
   "config": {
-    "mediaType": "application/vnd.cncf.notary.config.v2",
+    "mediaType": "application/vnd.cncf.notary.config.v2+json",
     "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7",
     "size": 102
   },
   "blobs": [
     {
-      "mediaType": "application/vnd.cncf.notary.v2.json",
+      "mediaType": "application/vnd.cncf.notary.signature.v2+json",
       "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
       "size": 32654
     }
   ],
-  "dependencies": [
+  "manifests": [
     {
-      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
-      "size": 16724
+      "size": 16724,
+      "annotations: {
+        "oci.distribution.relationship": "depends-on"
+      }
     }
-  ]
-}
+  ],
+  "annotations": {
+    "org.cncf.notary.v2.signature.subject": "docker.io"
+  }
 ```
+
+In the above example, the signing entity is Docker, which is represented as a notary scoped annotation: `"org.cncf.notary.v2.signature.subject": "docker.io"`
 
 #### OCI-Registry CLI
 
-To copy the above image and the associated signatures, a new `oci-reg` cli is proposed. The oci-reg cli is an independent tool that demonstrates the value of these collections, providing a unified standard means for working within and across different OCI compliant registry implementations.
+To copy the above image and the associated signatures, a new `oci-reg` cli is proposed for illustrative purposes. The `oci-reg` cli is an independent tool that demonstrates the value of these collections, providing a standard means for working within and across different OCI conformant registry implementations.
 
-The following command would copy the `mysql:8` image from docker hub to the acme-rockets registry. The CLI could be run within the source or target cloud. 
+The following command would copy the `mysql:8` image from docker hub to the acme-rockets registry. The CLI _could_ be run within the source or target cloud eliminating the download/upload network hops.
 
 ```bash
 oci-reg copy \
-  --source hub.docker.io/mysql:8 \
+  --source docker.io/mysql:8 \
   --target registry.acme-rockets.io/base-artifacts/mysql:8
 ```
 
 The `oci-reg copy` command would:
 
 - assure the manifest and layer/blob digests remain the same
-- copy any artifacts that are dependent on the source artifact-manifest, persisting them in the target registry.
+- copy any artifacts that are dependent on the source artifact-manifest, persisting them in the target registry. These _could_ include Notary v2 signatures, SBoMs, GPL source or other referenced artifacts.
 
 ### Reference Artifacts
 
@@ -239,7 +246,7 @@ There are a set of artifact types that declare references to other artifacts tha
 
 ![mysql image copy](./media/wordpress-helm-chart-copy.svg)
 
-In the above scenario, a helm chart is copied from a public registry to the ACME Rockets registry.  The `wordpress-chart:v5` is represented as an `application/vnd.oci.artifact.manifest.v1+json`. The `wordpress-chart:v5` helm chart references the `wordpress:v5` image and the `mysql:8` image. All three artifacts have signatures attesting to their authenticity.
+In the above scenario, a helm chart is copied from a public registry to the ACME Rockets registry.  The `wordpress-chart:v5` is represented as an `application/vnd.oci.artifact.manifest.v1+json`. The `wordpress-chart:v5` helm chart references the `wordpress:v5` image and the `mysql:8` image. All three artifacts have Notary v2 signatures attesting to their authenticity.
 
 As the copy is initiated, the `oci.artifact.manifest` of the `wordpress-chart:v5` is evaluated. As the chart references the same version (digest) of the `mysql:8` image already in theACME Rockets registry, the copy skips duplicating the content and moves to copying the `wordpress:v5` image, the `wordpress-chart:v5` and their associated signatures.
 
@@ -251,40 +258,45 @@ To support the loose references between artifacts, a `references` collection is 
 
 ```json
 {
-  "schemaVersion": 2,
   "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
   "artifactType": "application/vnd.cncf.helm.v3",
   "config": {
     "mediaType": "application/vnd.cncf.helm.config.v1+json",
-    "size": 0,
-    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7"
+    "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7",
+    "size": 0
   },
   "blobs": [
     {
-      "mediaType": "application/vnd.cncf.helm.chart.v1.tar",
+      "mediaType": "application/vnd.cncf.helm.chart.v1+tar",
       "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
       "size": 32654
     },
     {
-      "mediaType": "application/vnd.cncf.helm.values.v1.yaml",
+      "mediaType": "application/vnd.cncf.helm.values.v1+yaml",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
       "size": 16724
     }
   ],
-  "references": [
+  "manifests": [
     {
-      "artifact": "wordpress:5.7",
-      "artifactType": "application/vnd.oci.image.manifest.v1.config.json",
-      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
-      "size": 1510
+      "size": 1510,
+      "annotations": [
+        "oci.distribution.relationship": "references",
+        "oci.distribution.artifact": "wordpress:5.7",
+        "oci.distribution.artifactType": "application/vnd.oci.image.v1",
+      ]
     },
     {
-      "artifact": "mysql:8",
-      "artifactType": "application/vnd.oci.image.manifest.v1.config.json",
-      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
-      "size": 1578
+      "size": 1578,
+      "annotations": [
+        "oci.distribution.relationship": "references",
+        "oci.distribution.artifact": "mysql:8",
+        "oci.distribution.artifactType": "application/vnd.oci.image.v1",
+      ]
     }
   ]
 }
@@ -302,7 +314,6 @@ As the `oci-reg copy` command is executed, the graph of references are expanded.
 
 ```json
 {
-  "schemaVersion": 2,
   "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
   "artifactType": "application/vnd.cncf.cnab.v1",
   "config": {
@@ -312,30 +323,37 @@ As the `oci-reg copy` command is executed, the graph of references are expanded.
   },
   "blobs": [
     {
-      "mediaType": "application/vnd.cncf.cnab.v1.tar",
+      "mediaType": "application/vnd.cncf.cnab.v1+tar",
       "digest": "sha256:9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
       "size": 32654
     },
     {
-      "mediaType": "application/vnd.cncf.cnab.params.v1.json",
+      "mediaType": "application/vnd.cncf.cnab.params.v1+json",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
       "size": 16724
     }
   ],
-  "references": [
+  "manifests": [
     {
-      "artifact": "wordpress-chart:v5",
-      "artifactType": "application/vnd.cncf.helm.v1.config.json",
       "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
-      "size": 1510
+      "size": 1510,
+      "annotations": [
+        "oci.distribution.relationship": "references",
+        "oci.distribution.artifact": "wordpress-chart:v5",
+        "oci.distribution.artifactType": "application/vnd.cncf.helm.v3",
+      ]
     },
     {
       "artifact": "helm-cli:3",
-      "artifactType": "application/vnd.oci.image.manifest.v1.config.json",
-      "mediaType": "application/vnd.oci.image.manifest.v1.config.json",
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
-      "size": 1578
+      "size": 1578,
+      "annotations": [
+        "oci.distribution.relationship": "references",
+        "oci.distribution.artifact": "helm-cli:3",
+        "oci.distribution.artifactType": "application/vnd.oci.image.manifest.v1",
+      ]
     }
   ]
 }
@@ -396,6 +414,9 @@ OCI Artifact Manifests provide the following types of references:
 ### Blobs Collection
 
 All blobs are considered to be hard dependencies that must be resolvable within a registry. An artifact is considered invalid if the manifest blobs are not resolvable. Registries MAY implement de-duping, using ref-counting to assure at least one copy of the blob is resolvable for any given `oci.artifact.manifest`. OCI Artifact blobs are generalizations of the OCI Image Spec layers definition.
+## Manifests Collection
+
+> **NOTE!** Update to consolidate the Dependencies and References collections
 
 ### Dependencies Collection
 
