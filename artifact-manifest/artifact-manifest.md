@@ -209,7 +209,7 @@ To support hard references, an additional dependencies collection is added to a 
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
       "size": 16724,
-      "annotations: {
+      "annotations": {
         "oci.distribution.relationship": "depends-on"
       }
     }
@@ -282,21 +282,21 @@ To support the loose references between artifacts, a `references` collection is 
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
       "size": 1510,
-      "annotations": [
+      "annotations": {
         "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "wordpress:5.7",
-        "oci.distribution.artifactType": "application/vnd.oci.image.v1",
-      ]
+        "oci.distribution.artifactType": "application/vnd.oci.image.v1"
+      }
     },
     {
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
       "size": 1578,
-      "annotations": [
+      "annotations": {
         "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "mysql:8",
-        "oci.distribution.artifactType": "application/vnd.oci.image.v1",
-      ]
+        "oci.distribution.artifactType": "application/vnd.oci.image.v1"
+      }
     }
   ]
 }
@@ -338,22 +338,22 @@ As the `oci-reg copy` command is executed, the graph of references are expanded.
       "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
       "size": 1510,
-      "annotations": [
+      "annotations": {
         "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "wordpress-chart:v5",
-        "oci.distribution.artifactType": "application/vnd.cncf.helm.v3",
-      ]
+        "oci.distribution.artifactType": "application/vnd.cncf.helm.v3"
+      }
     },
     {
       "artifact": "helm-cli:3",
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
       "size": 1578,
-      "annotations": [
+      "annotations": {
         "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "helm-cli:3",
-        "oci.distribution.artifactType": "application/vnd.oci.image.manifest.v1",
-      ]
+        "oci.distribution.artifactType": "application/vnd.oci.image.manifest.v1"
+      }
     }
   ]
 }
@@ -414,6 +414,7 @@ OCI Artifact Manifests provide the following types of references:
 ### Blobs Collection
 
 All blobs are considered to be hard dependencies that must be resolvable within a registry. An artifact is considered invalid if the manifest blobs are not resolvable. Registries MAY implement de-duping, using ref-counting to assure at least one copy of the blob is resolvable for any given `oci.artifact.manifest`. OCI Artifact blobs are generalizations of the OCI Image Spec layers definition.
+
 ## Manifests Collection
 
 > **NOTE!** Update to consolidate the Dependencies and References collections
