@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
-  "artifactType": "application/vnd.cncf.cnab.v1+json.",
+  "artifactType": "application/vnd.cncf.cnab.v1",
   "config": {
     "mediaType": "application/vnd.cncf.cnab.config.v1+json",
     "digest": "sha256:b5b2b2c507a0944348e0303114d8d93aaaa081732b86451d9bce1f432a537bc7",
@@ -14,13 +14,13 @@
       "size": 32654
     }
   ],
-  "manifests": [],
-  "references": [
+  "manifests": [
     {
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
       "size": 1578,
       "annotations": {
+        "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "helm-cli:3"
       }
     },
@@ -29,9 +29,9 @@
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
       "size": 1510,
       "annotations": {
+        "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "wordpress-chart:v5"
       }
-
     }
   ]
 }

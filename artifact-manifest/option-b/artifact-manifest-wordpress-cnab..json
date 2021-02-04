@@ -31,7 +31,6 @@
       "annotations": {
         "oci.distribution.artifact": "wordpress-chart:v5"
       }
-
-    }
+   }
   ]
 }

@@ -18,10 +18,12 @@
     {
       "mediaType": "application/vnd.oci.image.manifest.v1+json",
       "digest": "sha256:3c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c6b",
-      "size": 16724
+      "size": 16724,
+      "annotations": {
+        "oci.distribution.relationship": "depends-on"
+      }
     }
   ],
-  "references": [],
   "annotations": {
     "org.cncf.notary.v2.signature.subject": "docker.io"
   }

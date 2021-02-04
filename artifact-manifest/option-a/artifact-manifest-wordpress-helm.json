@@ -14,13 +14,13 @@
       "size": 32654
     }
   ],
-  "manifests": [],
-  "references": [
+  "manifests": [
     {
       "mediaType": "application/vnd.oci.image.manifest.config.v1+json",
       "digest": "sha256:5c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c82",
       "size": 1510,
       "annotations": {
+        "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "wordpress:5.7"
       }
     },
@@ -29,6 +29,7 @@
       "digest": "sha256:8c3a4604a545cdc127456d94e421cd355bca5b528f4a9c1905b15da2eb4a4c31",
       "size": 1578,
       "annotations": {
+        "oci.distribution.relationship": "references",
         "oci.distribution.artifact": "mysql:8"
       }
     }
