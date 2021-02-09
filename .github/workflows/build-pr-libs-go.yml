@@ -3,7 +3,7 @@ name: build-pr-libs-go
 on:
   pull_request:
     branches:
-      - oras-libs
+      - main
 
 jobs:
   build:

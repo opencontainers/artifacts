@@ -2,7 +2,7 @@ name: build-libs-go
 
 on:
   push:
-    branches: oras-libs
+    branches: main
 
 jobs:
   build:
