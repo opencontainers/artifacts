@@ -3,7 +3,7 @@ name: build-pr-libs-go
 on:
   pull_request:
     branches:
-      - main
+      - oras-libs
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
         with:
           go-version: '1.15.7'
       - name: run unit tests
-        run: cd lib-go/ && make test
+        run: cd libs-go/ && make test
       - name: upload coverage report
         uses: actions/upload-artifact@master
         with:
