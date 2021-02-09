@@ -1,4 +1,4 @@
-package oras
+package artifacts
 
 import (
 	"errors"
@@ -18,6 +18,6 @@ var (
 	ErrPathTraversalDisallowed = errors.New("path traversal disallowed")
 )
 
-// ErrStopProcessing is used to stop processing an oras operation.
+// ErrStopProcessing is used to stop processing an artifact operation.
 // This error only makes sense in sequential pulling operation.
 var ErrStopProcessing = fmt.Errorf("stop processing")

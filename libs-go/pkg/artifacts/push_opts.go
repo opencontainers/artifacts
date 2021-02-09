@@ -1,4 +1,4 @@
-package oras
+package artifacts
 
 import (
 	"context"
@@ -31,7 +31,7 @@ func pushOptsDefaults() *pushOpts {
 	}
 }
 
-// PushOpt allows callers to set options on the oras push
+// PushOpt allows callers to set options on the artifact push
 type PushOpt func(o *pushOpts) error
 
 // WithConfig overrides the config - setting this will ignore WithConfigMediaType and WithConfigAnnotations
@@ -85,7 +85,7 @@ func WithNameValidation(validate func(desc ocispec.Descriptor) error) PushOpt {
 
 // ValidateNameAsPath validates name in the descriptor as file path in order
 // to generate good packages intended to be pulled using the FileStore or
-// the oras cli.
+// a CLI.
 // For cross-platform considerations, only unix paths are accepted.
 func ValidateNameAsPath(desc ocispec.Descriptor) error {
 	// no empty name

@@ -3,6 +3,8 @@ package docker
 import (
 	"context"
 
+	"github.com/opencontainers/artifacts/libs-go/pkg/constants"
+
 	ctypes "github.com/docker/cli/cli/config/types"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/registry"
@@ -32,7 +34,7 @@ func (c *Client) Login(ctx context.Context, hostname, username, secret string, i
 	if err != nil {
 		return err
 	}
-	if _, token, err := remote.Auth(ctx, &cred, "oras"); err != nil {
+	if _, token, err := remote.Auth(ctx, &cred, constants.RemoteAuthUserAgent); err != nil {
 		return err
 	} else if token != "" {
 		cred.Username = ""

@@ -20,6 +20,6 @@ jobs:
       - name: upload coverage report
         uses: actions/upload-artifact@master
         with:
-          name: oras-coverage-report-${{ github.sha }}
+          name: artifacts-libs-go-coverage-report-${{ github.sha }}
           path: libs-go/.cover/
         if: always()

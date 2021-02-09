@@ -38,7 +38,7 @@ func newContext() context.Context {
 }
 
 func (suite *DockerClientTestSuite) SetupSuite() {
-	tempDir, err := ioutil.TempDir("", "oras_auth_docker_test")
+	tempDir, err := ioutil.TempDir("", "oci_artifacts_libs_go_auth_docker_test")
 	suite.Nil(err, "no error creating temp directory for test")
 	suite.TempTestDir = tempDir
 

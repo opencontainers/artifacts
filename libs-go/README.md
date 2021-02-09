@@ -1,8 +1,6 @@
 # OCI Artifacts Go Libraries
 
 [![GitHub Actions status](https://github.com/bloodorangeio/artifacts/workflows/build-libs-go/badge.svg)](https://github.com/bloodorangeio/artifacts/actions?query=workflow%3Abuild-libs-go)
-[![Go Report Card](https://goreportcard.com/badge/github.com/bloodorangeio/artifacts/libs-go)](https://goreportcard.com/report/github.com/bloodorangeio/artifacts/libs-go)
-[![GoDoc](https://godoc.org/github.com/bloodorangeio/artifacts/libs-go?status.svg)](https://godoc.org/github.com/bloodorangeio/artifacts/libs-go)
 
 ## Example Usage
 
@@ -14,9 +12,9 @@ package main
 import (
 	"context"
 	"fmt"
-
+	
+	"github.com/opencontainers/artifacts/libs-go/pkg/artifacts"
 	"github.com/opencontainers/artifacts/libs-go/pkg/content"
-	"github.com/opencontainers/artifacts/libs-go/pkg/oras"
 
 	"github.com/containerd/containerd/remotes/docker"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
@@ -29,7 +27,7 @@ func check(e error) {
 }
 
 func main() {
-	ref := "localhost:5000/oras:test"
+	ref := "localhost:5000/artifacts:test"
 	fileName := "hello.txt"
 	fileContent := []byte("Hello World!\n")
 	customMediaType := "my.custom.media.type"
@@ -42,7 +40,7 @@ func main() {
 	desc := memoryStore.Add(fileName, customMediaType, fileContent)
 	pushContents := []ocispec.Descriptor{desc}
 	fmt.Printf("Pushing %s to %s...\n", fileName, ref)
-	desc, err := oras.Push(ctx, resolver, ref, memoryStore, pushContents)
+	desc, err := artifacts.Push(ctx, resolver, ref, memoryStore, pushContents)
 	check(err)
 	fmt.Printf("Pushed to %s with digest %s\n", ref, desc.Digest)
 
@@ -51,7 +49,7 @@ func main() {
 	fileStore := content.NewFileStore("")
 	defer fileStore.Close()
 	allowedMediaTypes := []string{customMediaType}
-	desc, _, err = oras.Pull(ctx, resolver, ref, fileStore, oras.WithAllowedMediaTypes(allowedMediaTypes))
+	desc, _, err = artifacts.Pull(ctx, resolver, ref, fileStore, artifacts.WithAllowedMediaTypes(allowedMediaTypes))
 	check(err)
 	fmt.Printf("Pulled from %s with digest %s\n", ref, desc.Digest)
 	fmt.Printf("Try running 'cat %s'\n", fileName)

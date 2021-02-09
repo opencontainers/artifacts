@@ -1,10 +1,10 @@
-package oras
+package artifacts
 
 import (
 	"context"
 	"encoding/json"
 
-	artifact "github.com/opencontainers/artifacts/libs-go/pkg/artifact"
+	"github.com/opencontainers/artifacts/libs-go/pkg/constants"
 
 	"github.com/containerd/containerd/content"
 	"github.com/containerd/containerd/images"
@@ -65,7 +65,7 @@ func pack(provider content.Provider, descriptors []ocispec.Descriptor, opts *pus
 	if opts.config == nil {
 		configBytes := []byte("{}")
 		config = ocispec.Descriptor{
-			MediaType: artifact.UnknownConfigMediaType,
+			MediaType: constants.UnknownConfigMediaType,
 			Digest:    digest.FromBytes(configBytes),
 			Size:      int64(len(configBytes)),
 		}

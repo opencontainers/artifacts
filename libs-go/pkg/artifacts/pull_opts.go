@@ -1,4 +1,4 @@
-package oras
+package artifacts
 
 import (
 	"context"
@@ -23,7 +23,7 @@ type pullOpts struct {
 	filterName             func(ocispec.Descriptor) bool
 }
 
-// PullOpt allows callers to set options on the oras pull
+// PullOpt allows callers to set options on the artifact pull
 type PullOpt func(o *pullOpts) error
 
 func pullOptsDefaults() *pullOpts {

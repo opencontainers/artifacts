@@ -1,4 +1,4 @@
-package oras
+package artifacts
 
 import (
 	"archive/tar"
@@ -42,7 +42,7 @@ var (
 	}
 )
 
-type ORASTestSuite struct {
+type ArtifactsTestSuite struct {
 	suite.Suite
 	DockerRegistryHost string
 }
@@ -56,7 +56,7 @@ func newResolver() remotes.Resolver {
 }
 
 // Start Docker registry
-func (suite *ORASTestSuite) SetupSuite() {
+func (suite *ArtifactsTestSuite) SetupSuite() {
 	config := &configuration.Configuration{}
 	port, err := freeport.GetFreePort()
 	if err != nil {
@@ -73,7 +73,7 @@ func (suite *ORASTestSuite) SetupSuite() {
 }
 
 // Push files to docker registry
-func (suite *ORASTestSuite) Test_0_Push() {
+func (suite *ArtifactsTestSuite) Test_0_Push() {
 	var (
 		err         error
 		ref         string
@@ -132,7 +132,7 @@ func (suite *ORASTestSuite) Test_0_Push() {
 }
 
 // Pull files and verify descriptors
-func (suite *ORASTestSuite) Test_1_Pull() {
+func (suite *ArtifactsTestSuite) Test_1_Pull() {
 	var (
 		err         error
 		ref         string
@@ -185,7 +185,7 @@ func (suite *ORASTestSuite) Test_1_Pull() {
 }
 
 // Push and pull with customized media types
-func (suite *ORASTestSuite) Test_2_MediaType() {
+func (suite *ArtifactsTestSuite) Test_2_MediaType() {
 	var (
 		testData = [][]string{
 			{"hi.txt", "application/vnd.me.hi", "hi"},
@@ -243,7 +243,7 @@ func (suite *ORASTestSuite) Test_2_MediaType() {
 }
 
 // Pull with condition
-func (suite *ORASTestSuite) Test_3_Conditional_Pull() {
+func (suite *ArtifactsTestSuite) Test_3_Conditional_Pull() {
 	var (
 		testData = [][]string{
 			{"version.txt", "edge"},
@@ -320,7 +320,7 @@ func (suite *ORASTestSuite) Test_3_Conditional_Pull() {
 }
 
 // Test for vulnerability GHSA-g5v4-5x39-vwhx
-func (suite *ORASTestSuite) Test_4_GHSA_g5v4_5x39_vwhx() {
+func (suite *ArtifactsTestSuite) Test_4_GHSA_g5v4_5x39_vwhx() {
 	var testVulnerability = func(headers []tar.Header, tag string, expectedError string) {
 		// Step 1: build malicious tar+gzip
 		buf := bytes.NewBuffer(nil)
@@ -356,8 +356,8 @@ func (suite *ORASTestSuite) Test_4_GHSA_g5v4_5x39_vwhx() {
 		_, err = Push(newContext(), newResolver(), ref, memoryStore, []ocispec.Descriptor{evilDesc})
 		suite.Nil(err, "no error pushing test data")
 
-		// Step 4: pull malicious tar with oras filestore and ensure error
-		tempDir, err := ioutil.TempDir("", "oras_test")
+		// Step 4: pull malicious tar with filestore and ensure error
+		tempDir, err := ioutil.TempDir("", "artifacts_test")
 		if err != nil {
 			suite.FailNow("error creating temp directory", err)
 		}
@@ -442,6 +442,6 @@ func (suite *ORASTestSuite) Test_4_GHSA_g5v4_5x39_vwhx() {
 	}
 }
 
-func TestORASTestSuite(t *testing.T) {
-	suite.Run(t, new(ORASTestSuite))
+func TestArtifactsTestSuite(t *testing.T) {
+	suite.Run(t, new(ArtifactsTestSuite))
 }

@@ -14,14 +14,14 @@ const (
 
 const (
 	// TempFilePattern specifies the pattern to create temporary files
-	TempFilePattern = "oras"
+	TempFilePattern = "oci-artifacts"
 )
 
 const (
 	// AnnotationDigest is the annotation key for the digest of the uncompressed content
-	AnnotationDigest = "io.deis.oras.content.digest"
+	AnnotationDigest = "org.opencontainers.artifacts.content.digest"
 	// AnnotationUnpack is the annotation key for indication of unpacking
-	AnnotationUnpack = "io.deis.oras.content.unpack"
+	AnnotationUnpack = "org.opencontainers.artifacts.content.unpack"
 )
 
 const (
