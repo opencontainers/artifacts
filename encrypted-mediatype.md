@@ -2,6 +2,8 @@
 
 To be able to protect the confidentiality of the data in layers, encryption of the layer data blobs can be done to prevent unauthorized access to layer data. Encryption is performed on the data blob of a by specifying a media type with the `+encrypted` suffix. For example, `application/vnd.oci.image.layer.v1.tar+encrypted` is an layer representation of an encrypted `application/vnd.oci.image.layer.v1.tar` layer. 
 
+**Note:** Due to ongoing concerns of scalability of the mediatype suffix model, the mediatype definitions for encryption encoding are subject to change and should be treated as Work In Progress (WIP). Details of this discussion can tracked at this [issue](https://github.com/opencontainers/image-spec/issues/791).
+
 ## `+encrypted` media type and annotation definitions
 
 Media types:
