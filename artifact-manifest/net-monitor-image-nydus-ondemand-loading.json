@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 3,
+  "mediaType": "application/vnd.oci.artifact.manifest.v1+json",
+  "artifactType": "cncf.nydus.v1-rc1",
+  "blobs": [
+    {
+      "mediaType": "application/vnd.cncf.nydus.bootstrap.v1.tar+gzip",
+      "digest": "sha256:f6bb0822fe567c98959bb87aa316a565eb1ae059c46fa8bba65b573b4489b44d",
+      "size": 32654
+    },
+    {
+      "mediaType": "application/vnd.cncf.nydus.blob.v1",
+      "digest": "sha256:d35808e58856ef91d07dedf94b93301b6efdfcc831477d3b1bb37e6c3e19cce6",
+      "size": 25851449
+    },
+    {
+      "mediaType": "application/vnd.cncf.nydus.blob.v1",
+      "digest": "sha256:dbad66bcfe29ef383157a3e122acbd08cd2ebd40f5658afa2ae62c52ffe26e9f",
+      "size": 226
+    }
+  ],
+  "subjectManifest": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:73c803930ea3ba1e54bc25c2bdc53edd0284c62ed651fe7b00369da519a3c333",
+    "size": 16724
+  },
+  "annotations": {
+    "org.cncf.nydus.v1.author": "wabbit-networks.io"
+  }
+}
