@@ -2,7 +2,7 @@
 
 Registries currently supporting OCI Artifacts
 
-- [Amazon Container Registry](https://aws.amazon.com/blogs/containers/oci-artifact-support-in-amazon-ecr/)
+- [Amazon ECR](https://aws.amazon.com/blogs/containers/oci-artifact-support-in-amazon-ecr/)
 - [Azure Container Registry](https://aka.ms/acr/artifacts)
 - [CNCF Distribution](https://github.com/distribution/distribution/) 
 - [Project Harbor](https://goharbor.io/blog/harbor-2.0/)
