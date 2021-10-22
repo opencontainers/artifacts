@@ -25,6 +25,15 @@ More particularly this repository has been tasked by the [OCI TOB](https://githu
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution (YASS).
 
+## Project Status
+
+The current state of the [OCI Artifacts][oci-artifacts] repository contains guidance for using [v1.01][oci-image-v101] of the [OCI image manifest][image-manifest] representing *individual* non-container image artifact types.
+
+Additional work has begun for storing references between artifacts, including software bill of materials, scan results and signatures for all artifacts in the graph. To support persistance, reference discovery, lifecycle management and promotion within and across registries, a new set of specifications are being developed.
+
+- The active development is proceeding under the [oras-project/artifacts-spec repository][oras-artifacts]
+- An [OCI working group for reference types][oci-reftype-wg] has been proposed for how and which OCI specifications might adopt the specification enhancements
+
 ## Project Governance and License
 
 - [Artifact Authors- How To][artifact-authors]
@@ -58,9 +67,13 @@ Artifacts will reference specific [distribution][distribution-spec], [index][ima
 A: No.  Artifacts are a prescriptive means of storing [index][image-index] and [manifest][image-manifest] within [distribution][distribution-spec] implementations.
 
 [artifact-authors]:     ./artifact-authors.md
-[code-of-conduct]:      https://github.com/opencontainers/org/blob/master/CODE_OF_CONDUCT.md
-[distribution]:         https://github.com/docker/distribution
+[code-of-conduct]:      https://github.com/opencontainers/.github/blob/master/CODE_OF_CONDUCT.md
+[distribution]:         https://github.com/distribution/distribution
 [distribution-spec]:    https://github.com/opencontainers/distribution-spec/
-[image-index]:          https://github.com/opencontainers/image-spec/blob/master/image-index.md
-[image-manifest]:       https://github.com/opencontainers/image-spec/blob/master/manifest.md
+[image-index]:          https://github.com/opencontainers/image-spec/blob/main/image-index.md
+[image-manifest]:       https://github.com/opencontainers/image-spec/blob/main/manifest.md
+[oci-artifacts]:        https://github.com/opencontainers/artifacts
+[oci-image-v101]:       https://github.com/opencontainers/image-spec/releases/tag/v1.0.1
+[oci-reftype-wg]:       https://github.com/opencontainers/tob/issues/96
+[oras-artifacts]:       https://github.com/oras-project/artifacts-spec/
 [singularity]:          https://github.com/sylabs/singularity
