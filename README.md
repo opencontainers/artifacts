@@ -25,6 +25,15 @@ More particularly this repository has been tasked by the [OCI TOB](https://githu
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution (YASS).
 
+## Project Status
+
+The current state of the [OCI Artifacts][oci-artifacts] repository:
+- The repository contains guidance for using [v1.0.1][oci-image-v101] of the [OCI image manifest][image-manifest] representing *individual* non-container image artifact types.
+- This project recognizes that additional work is needed to find ways to improve existing OCI artifact types, such as OCI images, to formally include a software bill of materials (SBOMs), scan results, signatures, and other OCI artifact related extensions. Depending on the implementation chosen, additional APIs to manage these extensions may also be needed. We believe these requirements will either require modifications to the existing specs or some new specification depending on the output of various working groups.  
+  This project, however, does not currently have the mission to create new specifications or commit changes to the existing specifications.
+- External to OCI there exists an active community of developers working under the [oras-project/artifacts-spec repository][oras-artifacts] on proposed changes to the OCI specifications.
+- An [OCI working group for reference types][oci-reftype-wg] has been proposed to work out how OCI should adopt these extensions.
+
 ## Project Governance and License
 
 - [Artifact Authors- How To][artifact-authors]
@@ -58,9 +67,13 @@ Artifacts will reference specific [distribution][distribution-spec], [index][ima
 A: No.  Artifacts are a prescriptive means of storing [index][image-index] and [manifest][image-manifest] within [distribution][distribution-spec] implementations.
 
 [artifact-authors]:     ./artifact-authors.md
-[code-of-conduct]:      https://github.com/opencontainers/org/blob/master/CODE_OF_CONDUCT.md
-[distribution]:         https://github.com/docker/distribution
+[code-of-conduct]:      https://github.com/opencontainers/.github/blob/master/CODE_OF_CONDUCT.md
+[distribution]:         https://github.com/distribution/distribution
 [distribution-spec]:    https://github.com/opencontainers/distribution-spec/
-[image-index]:          https://github.com/opencontainers/image-spec/blob/master/image-index.md
-[image-manifest]:       https://github.com/opencontainers/image-spec/blob/master/manifest.md
+[image-index]:          https://github.com/opencontainers/image-spec/blob/main/image-index.md
+[image-manifest]:       https://github.com/opencontainers/image-spec/blob/main/manifest.md
+[oci-artifacts]:        https://github.com/opencontainers/artifacts
+[oci-image-v101]:       https://github.com/opencontainers/image-spec/releases/tag/v1.0.1
+[oci-reftype-wg]:       https://github.com/opencontainers/tob/issues/96
+[oras-artifacts]:       https://github.com/oras-project/artifacts-spec/
 [singularity]:          https://github.com/sylabs/singularity
