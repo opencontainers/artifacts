@@ -2,6 +2,7 @@
 
 A collection of definitions and terms used within this repository.
 
+* [Artifact](#artifact)
 * [Artifact Author](#artifact-author)
 * [Distribution Operator](#distribution-operator)
 * [Media Type](#media-type)
@@ -9,6 +10,15 @@ A collection of definitions and terms used within this repository.
 * [Registry](#registry)
 * [Well Known Type](#well-known-type)
 * [YASS](#yass)
+
+## Artifact
+
+An artifact is a piece of data that is being cohesively considered from a users perspective, meaning that the user shouldn't be concerned about the individual parts that he needs to get the "artifact" as long as he gets all the parts needed for the user to consider the artifact to be complete. What is the type of content of an artifact depends on the project implementing the artifacts specification. It's up to the implementations of the specification to define which type of content and how it's internally organized.
+
+This definition is much easier to understand with some examples:
+- For container images, the content type that a user wants to manage cohesively is an image. The user shouldn't care about manifests or layers, only about images.
+- For helm charts, the content type that the user wants to manage cohesively is a helm chart. The user shouldn't need to care about the fact that the helm chart will be always accompanyed by a file that helps vefifying the provenance of the helm chart.
+- For a packaging system, the content type that a user wants to manage cohesively is a package. It's an implementation detail irrelevant for the user, if a "package" provides only the binaries, or also additional content like installation hooks, a SBOM, all licenses, the package signature,...
 
 ## Artifact Author
 
