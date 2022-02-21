@@ -53,7 +53,7 @@ The manifest `config.mediaType` is the equivalent of a file extension, enabling 
 |Icon|Artifact|`config.mediaType`|
 |-|-|-|
 |<img src="https://github.com/opencontainers/artwork/blob/master/oci/icon/color/oci-icon-color.png?raw=true" width=30x>|[OCI Image][image-spec]|`application/vnd.oci.image.config.v1+json`|
-|<img src="https://github.com/helm/helm-www/blob/main/themes/helm/static/img/apple-touch-icon.png?raw=true" width=30x>|[Helm Chart](https://helm.sh)|`application/vnd.cncf.helm.chart.config.v1+json`|
+|<img src="https://github.com/helm/helm-www/blob/main/themes/helm/static/img/apple-touch-icon.png?raw=true" width=30x>|[Helm Chart](https://helm.sh)|`application/vnd.cncf.helm.config.v1+json`|
 |<img src="https://github.com/sylabs/singularity/blob/master/docs/logos/singularity_v3.png?raw=true" width=30x>|[Singularity][singularity], by [Sylabs][sylabs]|`application/vnd.sylabs.sif.config.v1+json`|
 
 ## Defining a Unique Artifact Type
@@ -165,8 +165,7 @@ Layer formats that may change should define a version to future proof new enhanc
 | Non-compressed OCI Image layer | `application/vnd.oci.image.layer.v1.tar` |
 | [gzip] Compressed OCI Image layer | `application/vnd.oci.image.layer.v1.tar+gzip` |
 | [gzip] Compressed Docker Image layer | `application/vnd.docker.image.rootfs.diff.tar+gzip` |
-| Non-compressed Helm Chart layer | `application/vnd.cncf.helm.chart.layer.v1.tar` |
-| [gzip] Compressed Helm Chart layer | `application/vnd.cncf.helm.chart.layer.v1.tar+gzip` |
+| [gzip] Compressed Helm Chart layer | `application/vnd.cncf.helm.chart.content.v1.tar+gzip` |
 | Singularity SIF layer | `application/vnd.sylabs.sif.layer.v1.sif` |
 | Sample Doc Artifact Summary layer | `application/vnd.oci.sample-repo-doc.summary.layer.v1.md` |
 | Sample Doc Artifact Content layer| `application/vnd.oci.sample-repo-doc.content.layer.v1.tar` |
