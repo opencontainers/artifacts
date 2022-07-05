@@ -52,9 +52,9 @@ The manifest `config.mediaType` is the equivalent of a file extension, enabling 
 
 |Icon|Artifact|`config.mediaType`|
 |-|-|-|
-|<img src="https://github.com/opencontainers/artwork/blob/master/oci/icon/color/oci-icon-color.png?raw=true" width=30x>|[OCI Image][image-spec]|`application/vnd.oci.image.config.v1+json`|
+|<img src="https://github.com/opencontainers/artwork/blob/main/oci/icon/color/oci-icon-color.png?raw=true" width=30x>|[OCI Image][image-spec]|`application/vnd.oci.image.config.v1+json`|
 |<img src="https://github.com/helm/helm-www/blob/main/themes/helm/static/img/apple-touch-icon.png?raw=true" width=30x>|[Helm Chart](https://helm.sh)|`application/vnd.cncf.helm.config.v1+json`|
-|<img src="https://github.com/sylabs/singularity/blob/master/docs/logos/singularity_v3.png?raw=true" width=30x>|[Singularity][singularity], by [Sylabs][sylabs]|`application/vnd.sylabs.sif.config.v1+json`|
+|<img src="https://github.com/sylabs/singularity/blob/main/docs/logos/singularity_v3.png?raw=true" width=30x>|[Singularity][singularity], by [Sylabs][sylabs]|`application/vnd.sylabs.sif.config.v1+json`|
 
 ## Defining a Unique Artifact Type
 
