@@ -57,7 +57,7 @@ This project incorporates the Governance and Releases processes from the OCI pro
 
 ## Project Communications
 
-This project would continue to use existing channels in use by the [OCI developer community for communication](https://github.com/opencontainers/org#communications)
+This project uses existing channels in use by the [OCI developer community for communication](https://github.com/opencontainers/org#communications)
 
 ### Versioning / Roadmap
 
