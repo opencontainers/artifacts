@@ -34,8 +34,14 @@ The current state of the [OCI Artifacts][oci-artifacts] repository:
 
 ## Related Projects Working on Extending OCI Specs
 
-  - [OCI Reference Type Working Group][oci-reftype-wg]
-  - [CNCF ORAS Artifacts Spec][oras-artifacts]
+- [OCI Reference Type Working Group][oci-reftype-wg] - created by the OCI TOB
+- [Docker buildkit][buildkit]
+- [OpenSSF sigstore/cosign][cosign]
+- [Google go-containerregistry/crane][crane]
+- [CNCF distribution][distribution]
+- [CNCF ORAS Artifacts Spec][oras-artifacts]
+- [regclient][regclient]
+- [zot][zot]
 
 ## Project Governance and License
 
@@ -70,7 +76,10 @@ Artifacts will reference specific [distribution][distribution-spec], [index][ima
 A: No.  Artifacts are a prescriptive means of storing [index][image-index] and [manifest][image-manifest] within [distribution][distribution-spec] implementations.
 
 [artifact-authors]:     ./artifact-authors.md
+[buildkit]:             https://github.com/moby/buildkit
 [code-of-conduct]:      https://github.com/opencontainers/.github/blob/master/CODE_OF_CONDUCT.md
+[cosign]:               https://github.com/sigstore/cosign
+[crane]:                https://github.com/google/go-containerregistry/tree/main/cmd/crane
 [distribution]:         https://github.com/distribution/distribution
 [distribution-spec]:    https://github.com/opencontainers/distribution-spec/
 [image-index]:          https://github.com/opencontainers/image-spec/blob/main/image-index.md
@@ -79,4 +88,6 @@ A: No.  Artifacts are a prescriptive means of storing [index][image-index] and [
 [oci-image-v101]:       https://github.com/opencontainers/image-spec/releases/tag/v1.0.1
 [oci-reftype-wg]:       https://github.com/opencontainers/wg-reference-types/
 [oras-artifacts]:       https://github.com/oras-project/artifacts-spec/
+[regclient]:            https://github.com/regclient/regclient/
 [singularity]:          https://github.com/sylabs/singularity
+[zot]:                  https://github.com/project-zot/zot
