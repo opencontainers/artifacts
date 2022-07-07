@@ -31,7 +31,6 @@ The current state of the [OCI Artifacts][oci-artifacts] repository:
 - The repository contains guidance for using [v1.0.1][oci-image-v101] of the [OCI image manifest][image-manifest] representing *individual* non-container image artifact types.
 - This project recognizes that additional work is needed to find ways to improve existing OCI artifact types, such as OCI images, to formally include a software bill of materials (SBOMs), scan results, signatures, and other OCI artifact related extensions. Depending on the implementation chosen, additional APIs to manage these extensions may also be needed. We believe these requirements will either require modifications to the existing specs or some new specification depending on the output of various working groups.  
   This project, however, does not currently have the mission to create new specifications or commit changes to the existing specifications.
-- An [OCI working group for reference types][oci-reftype-wg] has been proposed to work out how OCI should adopt these extensions.
 
 ## Related Projects Working on Extending OCI Specs
 
