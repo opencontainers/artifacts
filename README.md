@@ -34,7 +34,10 @@ The current state of the [OCI Artifacts][oci-artifacts] repository:
 
 ## Related Projects Working on Extending OCI Specs
 
-- [OCI Reference Type Working Group][oci-reftype-wg] - created by the OCI TOB
+[OCI Reference Type Working Group][oci-reftype-wg]
+
+Other projects:
+
 - [Docker buildkit][buildkit]
 - [OpenSSF sigstore/cosign][cosign]
 - [Google go-containerregistry/crane][crane]
