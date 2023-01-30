@@ -7,6 +7,7 @@ Registries currently supporting OCI Artifacts
 - [CNCF Distribution](https://github.com/distribution/distribution/) 
 - [Project Harbor](https://goharbor.io/blog/harbor-2.0/)
 - [Quay.io](https://www.openshift.com/blog/quay-oci-artifact-support-for-helm-charts)
-_(to add your project, please open a [pull-request](https://github.com/opencontainers/artifacts/pulls))_
+- [zot](https://zotregistry.io)
+- _(to add your project, please open a [pull-request](https://github.com/opencontainers/artifacts/pulls))_
 
 [distribution-spec]: https://github.com/opencontainers/distribution-spec/
