@@ -36,7 +36,7 @@ OCI Image is a specific type of artifact. However, an OCI image is not meant to 
 
 ## Registry
 
-A registry, or container registry, is an instance of the [distribution-spec]. See [Implementers](implementers.md) for a list of registries that support OCI Artifacts.
+A registry, or container registry, is an instance of the [distribution-spec]. See [Implementers][implementers] for a list of registries that support OCI Artifacts.
 
 ## Well Known Type
 
