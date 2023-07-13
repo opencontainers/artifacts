@@ -10,7 +10,7 @@ We hope to provide additional guidance to assist in transitioning. That addition
 Catch us on slack for more details and/or please chime in with PRs and help in drafting new guidance docs for artifact authors, registry operators, vendors, and clearing house content issues not already covered by [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml). 
 
 ## Artifact Guidance Documents
-**This content is for 1.0 only and is not in sync with 1.1 changes.**
+**This content was suggested for 1.0 only and is not in sync with 1.1 changes.**
 
 1. [Artifact Author Guidance](./artifact-authors.md)
 
@@ -50,7 +50,6 @@ The current state of the [OCI Artifacts][oci-artifacts] repository:
 
 ## Project Governance and License
 
-- [Artifact Authors- How To][artifact-authors]
 - [The Apache License, Version 2.0](LICENSE)
 - [Maintainers](MAINTAINERS)
 - [Maintainer guidelines](MAINTAINERS_GUIDE.md)
