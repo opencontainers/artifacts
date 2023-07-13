@@ -9,15 +9,18 @@ We hope to provide additional guidance to assist in transitioning. That addition
 
 Catch us on slack for more details and/or please chime in with PRs and help in drafting new guidance docs for artifact authors, registry operators, vendors, and clearing house content issues not already covered by [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml). 
 
-## Artifact Guidance Documents - 1.0 only and not in sync with 1.1 changes
+## Artifact Guidance Documents
+**This content is for 1.0 only and is not in sync with 1.1 changes.**
 
 1. [Artifact Author Guidance](./artifact-authors.md)
 
-## Supporting Documents - 1.0 only and not in sync with 1.1 changes
+## Supporting Documents
+**This content is for 1.0 only and is not in sync with 1.1 changes.**
 
 - [Term Definitions](./definitions-terms.md)
 
-## Project Introduction and Scope - 1.0 only and not in sync with 1.1 changes
+## Project Introduction and Scope
+**This intro and scope was for 1.0 only and is not in sync with 1.1 changes.**
 
 Container registries, implementing the [distribution-spec][distribution-spec], provide reliable, highly scalable, secured storage services for container images. Customers either use a cloud provider implementation, vendor implementations, or instance the open source implementation of [distribution][distribution]. They configure security and networking to assure the images in the registry are locked down and accessible by the resources required. Cloud providers and vendors often provide additional values atop their registry implementations from security to productivity features.
 
@@ -34,12 +37,11 @@ More particularly this repository has been tasked by the [OCI TOB](https://githu
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution (YASS).
 
-## Project Status - 1.0 only and not in sync with 1.1 changes
+## Project Status
 
 The current state of the [OCI Artifacts][oci-artifacts] repository:
-- The repository contains guidance for using [v1.0.1][oci-image-v101] of the [OCI image manifest][image-manifest] representing *individual* non-container image artifact types.
-- This project recognizes that additional work is needed to find ways to improve existing OCI artifact types, such as OCI images, to formally include a software bill of materials (SBOMs), scan results, signatures, and other OCI artifact related extensions. Depending on the implementation chosen, additional APIs to manage these extensions may also be needed. We believe these requirements will either require modifications to the existing specs or some new specification depending on the output of various working groups.  
-  **This project, however, does not currently have the mission to create new specifications or commit changes to the existing specifications.**
+- The repository contains guidance originally considered useful for the 1.0 specs. This guidance is considered out of sync with the evolutionary changes scheduled to release with the 1.1 specifications. 
+- **This project, does not have the mission to create new specifications or commit changes to the existing specifications.**
 
 ## Related Projects Working on Extending OCI Specs
 
