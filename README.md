@@ -1,7 +1,7 @@
 # OCI Artifacts
 
 ## Mission Update
-**The 1.1 releases of [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are tasked with providing details for enabling OCI artifacts support.** The guidance provided by therein replaces all 1.0 guidance content provided herein in this repo. 
+**The 1.1 releases of [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are tasked with providing details for enabling OCI artifacts support.** The guidance provided therein replaces all 1.0 guidance content provided herein in this repo. 
 
 The 1.1 version of the [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are currently in release candidate review stage. In particular the image spec provides a few examples and spec changes in the section [Guidelines for Artifact Usage](https://github.com/opencontainers/image-spec/blob/main/manifest.md#guidelines-for-artifact-usage) and also link to changes in the distribution spec for using the referrers api to retrive artifacts that refer to OCI content. Some guidance for supporting artifacts by 1.0 compliant registries and clients is provided in the distribution specification release candidate.
 
