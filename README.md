@@ -1,14 +1,23 @@
 # OCI Artifacts
 
-## Artifact Guidance Documents
+## Mission Update
+**The 1.1 releases of [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are tasked with providing details for enabling OCI artifacts support.** The guidance provided by therein replaces all 1.0 guidance content provided herein in this repo. 
+
+The 1.1 version of the [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are currently in release candidate review stage. In particular the image spec provides a few examples and spec changes in the section [Guidelines for Artifact Usage](https://github.com/opencontainers/image-spec/blob/main/manifest.md#guidelines-for-artifact-usage) and also link to changes in the distribution spec for using the referrers api to retrive artifacts that refer to OCI content. Some guidance for supporting artifacts by 1.0 compliant registries and clients is provided in the distribution specification release candidate.
+
+We hope to provide additional guidance to assist in transitioning. That additional guidance may be done in the image and/or distibution specifications, as the scope of this repo is currently being reviewed by the tob.
+
+Catch us on slack for more details and/or please chime in with PRs and help in drafting new guidance docs for artifact authors, registry operators, vendors, and clearing house content issues not already covered by [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml). 
+
+## Artifact Guidance Documents - 1.0 only and now out of date
 
 1. [Artifact Author Guidance](./artifact-authors.md)
 
-## Supporting Documents
+## Supporting Documents - 1.0 only and now out of date
 
 - [Term Definitions](./definitions-terms.md)
 
-## Project Introduction and Scope
+## Project Introduction and Scope - 1.0 only and now out of date
 
 Container registries, implementing the [distribution-spec][distribution-spec], provide reliable, highly scalable, secured storage services for container images. Customers either use a cloud provider implementation, vendor implementations, or instance the open source implementation of [distribution][distribution]. They configure security and networking to assure the images in the registry are locked down and accessible by the resources required. Cloud providers and vendors often provide additional values atop their registry implementations from security to productivity features.
 
@@ -25,12 +34,12 @@ More particularly this repository has been tasked by the [OCI TOB](https://githu
 
 By providing an OCI artifact definition, the community can continue to innovate, focusing on new artifact types without having to build yet another storage solution (YASS).
 
-## Project Status
+## Project Status - 1.0 only and now out of date
 
 The current state of the [OCI Artifacts][oci-artifacts] repository:
 - The repository contains guidance for using [v1.0.1][oci-image-v101] of the [OCI image manifest][image-manifest] representing *individual* non-container image artifact types.
 - This project recognizes that additional work is needed to find ways to improve existing OCI artifact types, such as OCI images, to formally include a software bill of materials (SBOMs), scan results, signatures, and other OCI artifact related extensions. Depending on the implementation chosen, additional APIs to manage these extensions may also be needed. We believe these requirements will either require modifications to the existing specs or some new specification depending on the output of various working groups.  
-  This project, however, does not currently have the mission to create new specifications or commit changes to the existing specifications.
+  **This project, however, does not currently have the mission to create new specifications or commit changes to the existing specifications.**
 
 ## Related Projects Working on Extending OCI Specs
 
