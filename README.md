@@ -13,7 +13,7 @@ OCI Artifacts started in 2019 with [PRs to the Image](https://github.com/opencon
 
 In 2020, early supply chain security initiatives were evolving, requiring the addition of [reference information to existing artifacts (#29)](https://github.com/opencontainers/artifacts/pull/29), including signatures, Software Bill of Materials (SBOM), and new developing types.
 
-We're happy to see the journey completed with the Image and Distribution specs formalizing the addition of OCI Artifacts and Reference Types. With the [Image 1.1](https://github.com/opencontainers/image-spec/releases), and [Distribution 1.1 releases](https://github.com/opencontainers/distribution-spec/releases), the effort has come full circle, making it time to archiving the OCI Artifacts project.
+We're happy to see the journey completed with the Image and Distribution specs formalizing the addition of OCI Artifacts and Reference Types. With the [Image 1.1](https://github.com/opencontainers/image-spec/releases), and [Distribution 1.1 releases](https://github.com/opencontainers/distribution-spec/releases), the effort has come full circle, making it time to archive the OCI Artifacts project.
 
 The previous OCI Artifacts content is available in the [pre-archive branch](https://github.com/opencontainers/artifacts/tree/pre-archive)
 
