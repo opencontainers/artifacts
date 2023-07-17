@@ -1,18 +1,21 @@
 # OCI Artifacts
 
-# Archive Notice
+> ## ⚠️This repository has been archived and is no longer maintained. ⚠️
 
-This repository has been archived and is no longer maintained.
-For current guidance on using OCI to package artifacts, please see the [image-spec artifacts guidance documentation](https://github.com/opencontainers/image-spec/blob/main/artifacts-guidance.md).
+For current OCI Artifact guidance, please see:
+- image-spec: [artifacts guidance documentation](https://github.com/opencontainers/image-spec/blob/main/artifacts-guidance.md)
+- distribution-spec: [referrers API](https://github.com/opencontainers/distribution-spec/blob/main/spec.md#enabling-the-referrers-api)
 
-## Mission Update
-**The 1.1 releases of [OCI image-spec](https://github.com/opencontainers/image-spec) and [distribution spec](https://github.com/opencontainers/distribution-spec) are tasked with providing details for enabling OCI artifacts support.** The guidance provided therein replaces all 1.0 guidance content provided herein in this repo. 
 
-## Project Status
+## OCI Artifacts Converges with Image and Distribution Specs
 
-The current state of this repository:
-- The repository guidance herein originally considered useful for the 1.0 specs is out of sync with the chosen direction by the Artifacts Work Group and the subsequent evolutionary changes scheduled to release with the 1.1 specifications. 
-- **This project, does not have the mission to create new specifications or commit changes to the existing specifications.**
+OCI Artifacts started in 2019 with [PRs to the Image](https://github.com/opencontainers/image-spec/pull/770) and the [Distribution specs](https://github.com/opencontainers/distribution-spec/pull/65).  In September of 2019, the TOB voted to create the [New OCI Artifacts Project](https://opencontainers.org/posts/blog/2019-09-10-new-oci-artifacts-project/), generalizing the deployed container registry infrastructure to serve ecosystems of new artifacts. Artifact Authors no longer needed to create, nor host new package managers. By leveraging existing public and private registries, artifact authors benefit from the reliability, performance and security benefits users already manage. 
+
+In 2020, early supply chain security initiatives were evolving, requiring the addition of [reference information to existing artifacts (#29)](https://github.com/opencontainers/artifacts/pull/29), including signatures, Software Bill of Materials (SBOM), and new developing types.
+
+We're happy to see the journey completed with the Image and Distribution specs formalizing the addition of OCI Artifacts and Reference Types. With the [Image 1.1](https://github.com/opencontainers/image-spec/releases), and [Distribution 1.1 releases](https://github.com/opencontainers/distribution-spec/releases), the effort has come full circle, making it time to archiving the OCI Artifacts project.
+
+The previous OCI Artifacts content is available in the [pre-archive branch](https://github.com/opencontainers/artifacts/tree/pre-archive)
 
 ## Project License
 
